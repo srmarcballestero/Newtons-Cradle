@@ -208,8 +208,6 @@ def escriureFitxer(fitxer, t, x):
     fitxer.write("%e," % (x[N-1]))
 
 
-# Treball amb els fitxers de dades i de metadades
-
 nom_inp = input("Nom de l'execucio?\n")
 fitxer = open("../Simulacions/"+nom_inp+".csv", "w")
 metadata = open("../Simulacions/"+nom_inp+".dat", "w")
