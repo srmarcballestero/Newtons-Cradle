@@ -13,7 +13,7 @@ import numpy as np
 from scipy import constants as const
 from pathlib import Path
 
-from Simulacio import Sistema
+import Simulacio as sim
 
 """
 Variables caracterísitques dels sistema.
@@ -44,9 +44,9 @@ nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànic
 nom_simulacio = nom_directori + input("Nom de la simulació?\n")
 nom_metadata = Path(nom_simulacio+".dat")
 
-sistema = Sistema(**parametres_sist)
+sistema = sim.Sistema(**(sim.readMetadata(nom_metadata)))
 
-sistema.writeMetadata(nom_metadata)
+sistema.writeMetadata(Path(nom_simulacio+"1.dat"))
 
 
 # """

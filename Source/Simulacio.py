@@ -16,6 +16,44 @@ import numpy as np
 from scipy import constants as const
 
 
+def readMetadata(nom_metadata):
+    """
+    Llegeix el conjunt mínim de variables en un fitxer de metadades .dat.
+
+    Paràmetres
+        nom_metadata: pathlib.Path  # ruta de l'arxiu de metadades
+    Retorna
+        readMetadata(nom_metadata): dict # diccionari de metadades
+    """
+    file_metadata = open(nom_metadata, "r")
+    metadata = {}
+
+    metadata["N"] = int(file_metadata.readline())
+    metadata["g"] = float(file_metadata.readline())
+    metadata["L"] = float(file_metadata.readline())
+    metadata["R"] = float(file_metadata.readline())
+    metadata["gap"] = float(file_metadata.readline())
+    metadata["eta"] = float(file_metadata.readline())
+    metadata["gamma"] = float(file_metadata.readline())
+
+    A = file_metadata.readline().split(" ")[:-1]
+    m = file_metadata.readline().split(" ")[:-1]
+    E = file_metadata.readline().split(" ")[:-1]
+    j = file_metadata.readline().split(" ")[:-1]
+
+    metadata["A"] = np.array([float(i) for i in A])
+    metadata["m"] = np.array([float(i) for i in m])
+    metadata["E"] = np.array([float(i) for i in E])
+    metadata["j"] = np.array([float(i) for i in j])
+
+    metadata["pas"] = float(file_metadata.readline())
+    metadata["num_osc"] = float(file_metadata.readline())
+    metadata["salt"] = float(file_metadata.readline())
+
+    file_metadata.close()
+
+    return metadata
+
 class Sistema():
     """
     Classe que conté el conjunt de variables mínim per generar una simulació
@@ -122,11 +160,9 @@ class Sistema():
         metadata.write("%e\n" % (self.g))
         metadata.write("%e\n" % (self.L))
         metadata.write("%e\n" % (self.R))
+        metadata.write("%e\n" % (self.gap))
         metadata.write("%e\n" % (self.eta))
         metadata.write("%e\n" % (self.gamma))
-        metadata.write("%e\n" % (self.pas))
-        metadata.write("%e\n" % (self.num_osc))
-        metadata.write("%e\n" % (self.gap))
 
         for i in range(self.N):
             metadata.write("%e " % (self.A[i]))
@@ -143,5 +179,9 @@ class Sistema():
         for i in range(self.N):
             metadata.write("%e " % (self.j[i]))
         metadata.write("\n")
+
+        metadata.write("%e\n" % (self.pas))
+        metadata.write("%e\n" % (self.num_osc))
+        metadata.write("%e\n" % (self.salt))
 
         metadata.close()
