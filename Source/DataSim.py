@@ -1,64 +1,88 @@
 # -*- coding: utf-8 -*-
 
-# Projecte: Newton's Cradle
-# Descripció: Simulació del "Newton's Cradle" utilitzant l'algorisme de Verlet.
-# Revisió: 29/08/2020
+"""
+Projecte: Newton's Cradle.
 
+ - Autors: Parker, Neil i Ballestero, Marc.
+ - Descripció: Simulació del pèndol de Newton integrant numèricament l'equació
+   diferencial que el regeix seguint l'algorisme de Verlet.
+ - Revisió: 15/09/2020
+"""
 
 import numpy as np
 from scipy import constants as const
 import time
 
 
+"""
+Variables caracterísitques dels sistema.
+"""
 N = 2                             # nombre de boles
 g = const.g                       # acceleracio de la gravetat
 L = 1.3                           # longitud del fil
 R = 0.025                         # radi de les boles
-eta = 6.8e-4*1                    # coeficient de fregament dinàmic 6.8e-4
-gamma = 1.47e2*1                  # coeficient de dissipacio viscoelastica 1.47e2
+eta = 6.8e-4*1                    # coeficient de fregament dinàmic
+gamma = 1.47e2*1                  # coeficient de dissipacio viscoelàstica
 pas = 2.5e-3                      # pas de l'algoritme
 num_osc = 30                      # nombre d'oscil·lacions
 gap = 1.0e-3                      # espai entre les boles
 salt = 10                         # salt de desada de les dades en els impactes
 
-A = np.array([np.sin(4*const.pi/180)*L]+[0 for i in range(N-1)])     # amplitud
-m = np.array([0.1113, 0.1113])                                     # massa de les boles
-E = np.array([2.55e7, 2.55e7])                            # mòdul de Young
-j = np.array([0.48, 0.48])                                     # ratio de Poisson
+A = np.array([np.sin(4*const.pi/180)*L]+[0 for i in range(N-1)])    # amplitud inicial
+m = np.array([0.1113, 0.1113])                                      # massa de les boles
+E = np.array([2.55e7, 2.55e7])                                      # mòdul de Young
+j = np.array([0.48, 0.48])                                          # ràtio de Poisson
 
 
-T0 = 2*const.pi*np.sqrt(L/g)                       # periode dels pèndols
-k = np.sqrt(2*R)*E/(3*(1-j*j))                     # constant recuperadora de les boles
-v = A*np.sqrt(g/L)                                 # velocitat d'impacte
-kg = m*g/L                                         # constant recuperadora de la gravetat
-l0 = np.max(pow(pow(m,2)*pow(v,4)/pow(k,2),0.2))   # escala dels desplaçaments
-t0 = 0                                             # escala de temps
+T0 = 2.*const.pi*np.sqrt(L/g)                             # període dels pèndols
+k = np.append(np.sqrt(2*R)*E / (3*(1-j*j)),
+              [0. for i in range(N-1)])                   # constant recuperadora de les boles
+v = A*np.sqrt(g/L)                                        # velocitat d'impacte
+kg = m*g/L                                                # constant recuperadora de la gravetat
+l0 = np.max(pow(pow(m, 2)*pow(v, 4)/pow(k, 2), 0.2))      # escala dels desplaçaments
+t0 = 0.                                                   # escala de temps
 for i in range(N):
     if v[i] != 0:
         if t0 == 0:
-            t0 = pow(pow(m[i],2)/((pow(k[i],2)*v[i])),0.2)
-        elif pow(pow(m[i],2)/((pow(k[i],2)*v[i])),0.2) < t0:
-            t0 = pow(pow(m[i],2)/((pow(k[i],2)*v[i])),0.2)
+            t0 = pow(pow(m[i], 2) / ((pow(k[i], 2)*v[i])), 0.2)
+        elif pow(pow(m[i], 2) / ((pow(k[i], 2)*v[i])), 0.2) < t0:
+            t0 = pow(pow(m[i], 2)/((pow(k[i], 2)*v[i])), 0.2)
 
 dt = pas*t0                                # pas de temps
 t = -dt                                    # temps fisic
 temps_exec = num_osc*T0                    # temps d'execució
 iteracions = int(temps_exec/dt)            # nombre d'iteracions (dos períodes)
 
-# Inicialitzo la posició d'equilibri de manera que les boles s'estiguin tocant. En la posició incial, totes les boles estan en repòs a la seva posició d'equilibri i la bola 0 està en repòs desplaçada una distància A de la seva posició d'equilibri.
+"""
+Inicialitazió de les posicions i velocitats inicials.
+    pos_eq: posició d'equilibre de les boles
+    pos: s'hi guarden les últimes posicions de les boles
+    vel_inici: velocitat inicial de les boles
+"""
 
-k = np.append(np.sqrt(2*R)*E/(3*(1-j*j)),[0.])
-pos_eq = np.array([(2*R+gap)*i for i in range(1,N+1)])
-pos = np.empty((3,N))
+pos_eq = np.array([(2*R+gap)*i for i in range(N)])
+pos = np.empty((3, N))
 vel_inici = np.zeros(N)
-pos[0,:] = pos_eq
-pos[1,:] = pos_eq
-pos[:2,:] -= A
 
+pos[0, :] = pos_eq
+pos[1, :] = pos_eq
+pos[:2, :] -= A
 
-# Aquesta funció retorna el "solapament" entre les boles i i j.
+"""
+Declaració de funcions
+"""
+
 
 def xi(x, i, j):
+    """
+    Retorna el solapament entre les boles i-èssima i j-èssima.
+
+        Paràmetres
+            x: np.ndarray,
+            i, j: int,
+        Retorna
+            xi(x, i, j): float.
+    """
     if i < 0 or j < 0 or i >= N or j >= N:
         return 0.
 
@@ -71,16 +95,42 @@ def xi(x, i, j):
         return 0.
 
 
-# Aquesta funció retorna un vector amb l'acceleració de cadascuna de les boles, en funció de la seva posició.
+def dxi(i, j):
+    """
+    Retorna la derivada temporal del solapament entre les boles en un lapse dt.
+
+        Paràmetres
+            i, j: int
+        Retorna
+            dxi(i, j): np.ndarray
+    """
+    return (pow(xi(pos[1, :], i, j), 1.5)-pow(xi(pos[0, :], i, j), 1.5)) / dt
+
 
 def vel():
-    return (pos[1,:]-pos[0,:])/dt
+    """
+    Retorna les velocitats mitjanes de les boles en un lapse de temps dt.
 
-def dxi(i, j):
-    return (pow(xi(pos[1,:],i,j), 1.5)-pow(xi(pos[0,:],i,j),1.5))/dt
+        Paràmetres
+            None
+        Retorna
+            vel(): np.ndarray
+    """
+    return (pos[1, :]-pos[0, :]) / dt
+
 
 def acc(x, v):
-    return np.array([(k[i]*pow(xi(x,i-1,i),1.5)-k[i+1]*pow(xi(x,i,i+1),1.5)+kg[i]*(pos_eq[i]-x[i])-eta*v[i]+gamma*(dxi(i,i-1)-dxi(i,i+1)))/m[i] for i in range(N)])
+    """
+    Retorna les acceleracions de les boles.
+
+        Paràmetres
+            x, v: np.ndarray
+        Retorna
+            acc(x, v): np.ndarray
+    """
+    return np.array([(k[i]*pow(xi(x, i-1, i), 1.5)-k[i+1]*pow(xi(x, i, i+1), 1.5)
+                    + kg[i]*(pos_eq[i]-x[i])-eta*v[i]+gamma
+                    * (dxi(i, i-1)-dxi(i, i+1))) / m[i] for i in range(N)])
 
 
 # Aquesta funció implementa l'algorisme de Verlet i retorna la següent posició de les boles en funció de les dues posicions anteriors i el pas de temps dt.
