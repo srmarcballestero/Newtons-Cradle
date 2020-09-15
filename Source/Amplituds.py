@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# hola
 
 import numpy as np
 import matplotlib.pyplot as plt
