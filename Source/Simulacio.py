@@ -3,8 +3,9 @@
 """
 Projecte: Newton's Cradle.
 
+ - Mòdul: Simulacio.py
  - Autors: Parker, Neil i Ballestero, Marc.
- - Descripció: Funcions genèriques comunes per als mòduls del projecte.
+ - Descripció: Objectes i funcions genèriques comunes per als mòduls del projecte.
  - Revisió: 15/09/2020
 
 IMPORTANT: les següents són les dependències d'aquest mòdul
@@ -16,7 +17,7 @@ import numpy as np
 from scipy import constants as const
 
 
-def readMetadata(nom_metadata):
+def llegeixMetadata(nom_metadata):
     """
     Llegeix el conjunt mínim de variables en un fitxer de metadades .dat.
 
@@ -145,7 +146,7 @@ class Sistema():
         self.pos[1, :] = self.pos_eq
         self.pos[:2, :] -= A
 
-    def writeMetadata(self, nom_metadata):
+    def escriuMetadata(self, nom_metadata):
         """
         Escriu el conjunt mínim de variables en un fitxer de metadades .dat.
 
@@ -185,3 +186,135 @@ class Sistema():
         metadata.write("%e\n" % (self.salt))
 
         metadata.close()
+
+    def xi(self, x, i, j):
+        """
+        Retorna el solapament entre les boles i-èssima i j-èssima.
+
+            Paràmetres
+                x: np.ndarray,
+                i, j: int,
+            Retorna
+                xi(x, i, j): float.
+        """
+        if i < 0 or j < 0 or i >= self.N or j >= self.N:
+            return 0.
+
+        xi = 2.*self.R - np.fabs(x[i]-x[j])
+
+        if xi > 0:
+            return xi
+
+        else:
+            return 0.
+
+    def dxi(self, i, j):
+        """
+        Retorna la derivada temporal del solapament entre les boles en un lapse dt.
+
+            Paràmetres
+                i, j: int
+            Retorna
+                dxi(i, j): np.ndarray
+        """
+        return (pow(self.xi(self.pos[1, :], i, j), 1.5)-pow(self.xi(self.pos[0, :], i, j), 1.5)) / self.dt
+
+    def vel(self):
+        """
+        Retorna les velocitats mitjanes de les boles en un lapse de temps dt.
+
+            Paràmetres
+                None
+            Retorna
+                vel(): np.ndarray
+        """
+        return (self.pos[1, :]-self.pos[0, :]) / self.dt
+
+    def acc(self, x, v):
+        """
+        Retorna les acceleracions de les boles.
+
+            Paràmetres
+                x, v: np.ndarray
+            Retorna
+                acc(x, v): np.ndarray
+        """
+        return np.array([(self.k[i]*pow(self.xi(x, i-1, i), 1.5)-self.k[i+1]*pow(self.xi(x, i, i+1), 1.5)
+                        + self.kg[i]*(self.pos_eq[i]-x[i])-self.eta*v[i]+self.gamma
+                        * (self.dxi(i, i-1)-self.dxi(i, i+1))) / self.m[i] for i in range(self.N)])
+
+    def rungeKutta(self):
+        """
+        Implementa el mètode RK4 per calcular les dues primeres posicions del sistema.
+
+            Paràmetres
+                dt: float
+            Retorna
+                t + dt: float
+        """
+        k1v = self.dt*self.acc(self.pos[0, :], self.vel_inici)
+        k1x = self.vel_inici*self.dt
+
+        k2v = self.acc(self.pos[0, :]+0.5*k1x, self.vel_inici)*self.dt
+        k2x = (self.vel_inici+0.5*k1v)*self.dt
+
+        k3v = self.acc(self.pos[0, :]+0.5*k2x, self.vel_inici)*self.dt
+        k3x = (self.vel_inici+0.5*k2v)*self.dt
+
+        k4x = (self.vel_inici+k3v)*self.dt
+
+        self.pos[1, :] = self.pos[0, :] + 1./6.*(k1x+2.*k2x+2.*k3x+k4x)
+
+        return self.t + self.dt
+
+    def verlet(self):
+        """
+        Implementa l'algorisme de Verlet i calcula i desa la següent posició de les
+        boles en la variable pos, en funció de les dues posicions anteriors,
+        amb un pas dt.
+
+            Paràmetres
+                dt: float
+            Retorna
+                t + dt: float
+        """
+        self.pos[2, :] = 2.*self.pos[1, :] - self.pos[0, :] + self.dt*self.dt*self.acc(self.pos[1, :], self.vel())
+
+        return self.t + self.dt
+
+    def calculEnergia(self, i):
+        """
+        Retorna l'energia mecànica del sistema en un instant determinat.
+
+            Paràmetres
+                None
+            Retorna
+                E: float
+        """
+        E = 0.
+        vel_inst = self.vel()
+        pos_inst = (self.pos[1, :]+self.pos[0, :]) / 2.
+        for j in range(self.N):
+            E += 0.5*self.m[i]*vel_inst[j]*vel_inst[j]
+            E += 0.5*self.kg[i]*(pos_inst[j]-self.pos_eq[j]) * (pos_inst[j]-self.pos_eq[j])
+
+        return E
+
+    def escriuData(self, nom_data, t, x):
+        """
+        Escriu en un fitxer .csv les posicions de les boles.
+
+            Paràmetres
+                nom_data: pathlib.Path
+            Retorna
+                None
+        """
+        data = open(nom_data, "a")
+
+        data.write("%e," % (t))
+
+        for i in range(self.N-1):
+            data.write("%e," % (x[i]))
+        data.write("%e \n" % (x[self.N-1]))
+
+        data.close()

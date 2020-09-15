@@ -11,6 +11,7 @@ Projecte: Newton's Cradle.
 
 import numpy as np
 from scipy import constants as const
+from pathlib import Path
 import time
 
 
@@ -23,7 +24,7 @@ L = 1.3                           # longitud del fil
 R = 0.025                         # radi de les boles
 eta = 6.8e-4*1                    # coeficient de fregament dinàmic
 gamma = 1.47e2*1                  # coeficient de dissipacio viscoelàstica
-pas = 2.5e-3                      # pas de l'algoritme
+pas = 2.5e-1                      # pas de l'algoritme
 num_osc = 30                      # nombre d'oscil·lacions
 gap = 1.0e-3                      # espai entre les boles
 salt = 10                         # salt de desada de les dades en els impactes
@@ -39,7 +40,7 @@ k = np.append(np.sqrt(2*R)*E / (3*(1-j*j)),
               [0. for i in range(N-1)])                   # constant recuperadora de les boles
 v = A*np.sqrt(g/L)                                        # velocitat d'impacte
 kg = m*g/L                                                # constant recuperadora de la gravetat
-l0 = np.max(pow(pow(m, 2)*pow(v, 4)/pow(k, 2), 0.2))      # escala dels desplaçaments
+l0 = np.max(pow(pow(m, 2)*pow(v, 4)/pow(np.max(k), 2), 0.2))      # escala dels desplaçaments
 t0 = 0.                                                   # escala de temps
 for i in range(N):
     if v[i] != 0:
@@ -209,8 +210,8 @@ def escriureFitxer(fitxer, t, x):
 
 
 nom_inp = input("Nom de l'execucio?\n")
-fitxer = open("../Simulacions/"+nom_inp+".csv", "w")
-metadata = open("../Simulacions/"+nom_inp+".dat", "w")
+fitxer = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".csv"), "w")
+metadata = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".dat"), "w")
 
 metadata.write("%d\n" % (N))
 metadata.write("%e\n" % (g))

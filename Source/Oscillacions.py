@@ -3,9 +3,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import constants as const
+from pathlib import Path
 
 nom_inp = input("Nom de l'execucio?\n")
-metadata = open("../Simulacions/"+nom_inp + ".dat", "r")
+metadata = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".dat"), "r")
 
 N = int(metadata.readline())
 g = float(metadata.readline())
