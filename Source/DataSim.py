@@ -133,10 +133,18 @@ def acc(x, v):
                     * (dxi(i, i-1)-dxi(i, i+1))) / m[i] for i in range(N)])
 
 
-# Aquesta funció implementa l'algorisme de Verlet i retorna la següent posició de les boles en funció de les dues posicions anteriors i el pas de temps dt.
-
 def verlet(dt):
-    pos[2,:] = 2.*pos[1,:] - pos[0,:] + dt*dt*acc(pos[1,:], vel())
+    """
+    Implementa l'algorisme de Verlet i calcula i desa la següent posició de les
+    boles en la variable pos, en funció de les dues posicions anteriors,
+    amb un pas dt.
+
+        Paràmetres
+            dt: float
+        Retorna
+            t + dt: float
+    """
+    pos[2, :] = 2.*pos[1, :] - pos[0, :] + dt*dt*acc(pos[1, :], vel())
 
     return t + dt
 
