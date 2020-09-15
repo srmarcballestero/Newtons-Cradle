@@ -148,23 +148,44 @@ def verlet(dt):
 
     return t + dt
 
+
 def rungeKutta(dt):
-    k1v = dt*acc(pos[0,:], vel_inici)
+    """
+    Implementa el mètode RK4 per calcular les dues primeres posicions del sistema.
+
+        Paràmetres
+            dt: float
+        Retorna
+            t + dt: float
+    """
+    k1v = dt*acc(pos[0, :], vel_inici)
     k1x = vel_inici*dt
-    k2v = acc(pos[0,:]+0.5*k1x, vel_inici)*dt
+
+    k2v = acc(pos[0, :]+0.5*k1x, vel_inici)*dt
     k2x = (vel_inici+0.5*k1v)*dt
-    k3v = acc(pos[0,:]+0.5*k2x, vel_inici)*dt
+
+    k3v = acc(pos[0, :]+0.5*k2x, vel_inici)*dt
     k3x = (vel_inici+0.5*k2v)*dt
+
     k4x = (vel_inici+k3v)*dt
 
-    pos[1,:] = pos[0,:]+1/6*(k1x+2*k2x+2*k3x+k4x)
+    pos[1, :] = pos[0, :] + 1./6.*(k1x+2*k2x+2*k3x+k4x)
 
     return t + dt
 
+
 def calculEnergia():
-    E = 0
+    """
+    Retorna l'energia mecànica del sistema en un instant determinat.
+
+        Paràmetres
+            None
+        Retorna
+            E: float
+    """
+    E = 0.
     vel_inst = vel()
-    pos_inst = (pos[1,:]+pos[0,:])/2
+    pos_inst = (pos[1, :]+pos[0, :]) / 2.
     for j in range(N):
         E += 0.5*m[i]*vel_inst[j]*vel_inst[j]
         E += 0.5*kg[i]*(pos_inst[j]-pos_eq[j])*(pos_inst[j]-pos_eq[j])
@@ -172,10 +193,15 @@ def calculEnergia():
     return E
 
 
-
-# Aquesta funció escriu en un fitxer la posició de les cinc boles en format ".csv". Emmagatzemo les posicions en un fitxer ja que, si no ho faig, de seguida la memòria esdevé un factor limitant per a la simulació.
-
 def escriureFitxer(fitxer, t, x):
+    """
+    Escriu en un fitxer .csv les posicions de les boles.
+
+        Paràmetres
+            fitxer: _io.TextIOWrapper
+        Retorna
+            None
+    """
     fitxer.write("%e," % (t))
     for i in range(N-1):
         fitxer.write("%e," % (x[i]))
