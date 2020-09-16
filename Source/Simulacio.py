@@ -332,16 +332,20 @@ class Sistema():
 
 class Data():
     """
-    DOCSTRING.
-
-    A
+    Objecte que correspon al conjunt de dades de temps i posicions generades
+    en una simulació
     """
 
     def __init__(self, nom_data):
         """
-        DOCSTRING.
+        Genera un array a partir del fitxer de dades .csv i el separa en les
+        components temporal i espacial.
 
-        A
+            Paràmetres
+                nom_data: pathlib.Path          # Ruta del fitxer de metadades
+            Atributs
+                temps: np.ndarray
+                posicions: np.ndarray
         """
         self.nom_data = nom_data
 
