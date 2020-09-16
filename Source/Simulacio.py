@@ -56,7 +56,7 @@ def llegeixMetadata(nom_metadata):
     return metadata
 
 
-class Sistema():
+class Sistema:
     """
     Classe que conté el conjunt de variables mínim per generar una simulació
     i els seus mètodes genèrics.
@@ -225,16 +225,20 @@ class Sistema():
         """
         return (pow(self.xi(self.pos[1, :], i, j), 1.5)-pow(self.xi(self.pos[0, :], i, j), 1.5)) / self.dt
 
-    def vel(self):
+    def vel(self, posicions=None, i=1):
         """
         Retorna les velocitats mitjanes de les boles en un lapse de temps dt.
 
             Paràmetres
-                None
+                posicions: np.ndarray (default=None)
+                i: int
             Retorna
                 vel(): np.ndarray
         """
-        return (self.pos[1, :]-self.pos[0, :]) / self.dt
+        if posicions is None:
+            posicions = self.pos
+
+        return (posicions[i, :]-posicions[i-1, :]) / self.dt
 
     def acc(self, x, v):
         """
@@ -288,24 +292,6 @@ class Sistema():
 
         return self.t + self.dt
 
-    def calculEnergia(self, i):
-        """
-        Retorna l'energia mecànica del sistema en un instant determinat.
-
-            Paràmetres
-                None
-            Retorna
-                E: float
-        """
-        E = 0.
-        vel_inst = self.vel()
-        pos_inst = (self.pos[1, :]+self.pos[0, :]) / 2.
-        for j in range(self.N):
-            E += 0.5*self.m[i]*vel_inst[j]*vel_inst[j]
-            E += 0.5*self.kg[i]*(pos_inst[j]-self.pos_eq[j]) * (pos_inst[j]-self.pos_eq[j])
-
-        return E
-
     def escriuData(self, nom_data, t, x):
         """
         Escriu en un fitxer .csv les posicions de les boles.
@@ -330,10 +316,10 @@ class Sistema():
         data.close()
 
 
-class Data():
+class Data:
     """
     Objecte que correspon al conjunt de dades de temps i posicions generades
-    en una simulació
+    en una simulació, amb mètodes genèrics. Fill de Sistema.
     """
 
     def __init__(self, nom_data):

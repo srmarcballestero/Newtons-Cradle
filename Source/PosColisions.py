@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from cycler import cycler
 from scipy import constants as const
+from pathlib import Path
 
 
 
@@ -21,7 +22,7 @@ def xi(x, i, j):
 
 
 nom_inp = input("Nom de l'execucio?\n")
-metadata = open("../Simulacions/Gaps200dmm/"+nom_inp+".dat", "r")
+metadata = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/Gaps200dmm/"+nom_inp + ".dat"), "r")
 
 N = int(metadata.readline())
 g = float(metadata.readline())
@@ -44,7 +45,7 @@ m = np.array([float(i) for i in m])
 E = np.array([float(i) for i in E])
 j = np.array([float(i) for i in j])
 
-data = np.genfromtxt("../Simulacions/Gaps200dmm/"+nom_inp+".csv", delimiter=",")
+data = np.genfromtxt(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/Gaps200dmm/"+nom_inp + ".csv"), delimiter=",")
 pos = data[:,1:-1]
 temps = data[:,0]
 
