@@ -49,7 +49,7 @@ nom_data = Path(nom_simulacio+".csv")
 
 
 """
-Iteració del mètode de Verlet i generació del fitxer de metadades
+Iteració del mètode de Verlet
 """
 sist = sim.Sistema(**parametres_sist)
 sist.escriuMetadata(nom_metadata)
@@ -85,4 +85,4 @@ for n in range(1, sist.iteracions):
 sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :] - sist.pos_eq)
 # fitxer.write("%e\n" % (calculEnergia()))
 
-print("\n--- temps total: %.2f segons ---" % (time() - inici))
+print("--- temps total: %.2f segons ---\n" % (time() - inici))

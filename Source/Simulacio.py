@@ -146,6 +146,11 @@ class Sistema():
         self.pos[1, :] = self.pos_eq
         self.pos[:2, :] -= A
 
+        """
+        Control de l'escriptura en el fitxer de dades.
+        """
+        self.new_data = True
+
     def escriuMetadata(self, nom_metadata):
         """
         Escriu el conjunt mínim de variables en un fitxer de metadades .dat.
@@ -309,7 +314,11 @@ class Sistema():
             Retorna
                 None
         """
-        data = open(nom_data, "a")
+        if self.new_data:
+            data = open(nom_data, "w")
+            self.new_data = False
+        else:
+            data = open(nom_data, "a")
 
         data.write("%e," % (t))
 

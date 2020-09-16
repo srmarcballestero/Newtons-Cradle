@@ -12,22 +12,23 @@ N = int(metadata.readline())
 g = float(metadata.readline())
 L = float(metadata.readline())
 R = float(metadata.readline())
+gap = float(metadata.readline())
 eta = float(metadata.readline())
 gamma = float(metadata.readline())
-pas = float(metadata.readline())
-num_osc = float(metadata.readline())
-gap = float(metadata.readline())
 
 A = metadata.readline().split(" ")[:-1]
 m = metadata.readline().split(" ")[:-1]
 E = metadata.readline().split(" ")[:-1]
 j = metadata.readline().split(" ")[:-1]
 
-
 A = np.array([float(i) for i in A])
 m = np.array([float(i) for i in m])
 E = np.array([float(i) for i in E])
 j = np.array([float(i) for i in j])
+
+pas = float(metadata.readline())
+num_osc = float(metadata.readline())
+salt = float(metadata.readline())
 
 
 T0 = 2*const.pi*np.sqrt(L/g)               #periode dels pèndols
@@ -50,10 +51,11 @@ iteracions = int(temps_exec/dt)            #nombre d'iteracions (dos períodes)
 
 pos_eq = np.array([(2*R+gap)*i for i in range(N)])
 
-data = np.genfromtxt("../Simulacions/"+nom_inp+".csv", delimiter=",")
-pos = data[:,1:-1]
+data = np.genfromtxt(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".csv"), delimiter=",")
+pos = data[:,1:]
 t = data[:,0]
 
+print(pos)
 for i in range(np.size(pos, 0)):
     pos[i, :] += pos_eq
 
@@ -66,7 +68,7 @@ for i in range(N):
 plt.xlabel('t/T0 (-)', fontsize=18)
 plt.ylabel('x/R (-)', fontsize=18)
 
-plt.savefig("../Simulacions/"+nom_inp+"_Osc_Abs.png")
+# plt.savefig("../Simulacions/"+nom_inp+"_Osc_Abs.png")
 
 plt.legend(loc = 'lower left')
-#plt.show()
+plt.show()
