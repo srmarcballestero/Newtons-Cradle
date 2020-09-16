@@ -73,6 +73,5 @@ plt.xlabel('t/T0 (-)', fontsize=18)
 plt.ylabel('E (J)', fontsize=18)
 plt.legend(loc='lower left')
 
+plt.savefig("../Simulacions/"+nom_simulacio+"_Emc.png")
 plt.show()
-
-# plt.savefig("../Simulacions/"+nom_simulacio+"_Emc.png")

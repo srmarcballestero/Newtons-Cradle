@@ -9,7 +9,6 @@ Projecte: Newton's Cradle.
  - Revisió: 16/09/2020
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -35,7 +34,10 @@ sist = sim.Sistema(**parametres_sist)
 t = sim.Data(nom_data).temps
 pos = sim.Data(nom_data).posicions
 
-colors = ['b', 'g']
+"""
+Representació gràfica de les dades
+"""
+colors = ['b', 'g', 'c', 'k', 'm']
 
 for i in range(sist.N):
     plt.fill_between(t/sist.T0, pos[:, i]/sist.R - 1, pos[:, i]/sist.R + 1,
@@ -44,8 +46,8 @@ for i in range(sist.N):
 
 plt.xlabel('t/T0 (-)', fontsize=18)
 plt.ylabel('x/R (-)', fontsize=18)
+plt.legend(loc='lower left')
 
 plt.savefig(nom_simulacio+"OscAbs.png")
 
-plt.legend(loc='lower left')
 plt.show()
