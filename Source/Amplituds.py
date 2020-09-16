@@ -36,12 +36,9 @@ sist = sim.Sistema(**parametres_sist)
 t = sim.Data(nom_data).temps
 pos = sim.Data(nom_data).posicions
 
-
-default_cycler = (cycler(color=['b', 'g', 'r', 'y', 'm'])
-                  + cycler(linestyle=['-', '--', ':', '-.', '--']))
-plt.rc('axes', prop_cycle=default_cycler)
-
-
+"""
+Detecció i càlcul de l'amplitud dels màxims
+"""
 j = 0
 maxims = np.zeros(int(sist.num_osc))
 
@@ -51,6 +48,17 @@ for i in range(np.size(maxims)):
             maxims[i] = np.fabs(pos[j, 1])
         j += 1
 
+"""
+Representació gràfica de les dades
+"""
+default_cycler = (cycler(color=['b', 'g', 'r', 'y', 'm'])
+                  + cycler(linestyle=['-', '--', ':', '-.', '--']))
+plt.rc('axes', prop_cycle=default_cycler)
+
 plt.plot(np.array(range(1, int(sist.num_osc)+1)), maxims/np.max(sist.A), '.', color='blue')
+
+plt.xlabel("t/T0 (-)", fontsize=18)
+plt.ylabel("x/A (-)", fontsize=18)
+
 plt.savefig(Path(nom_simulacio+"_Amp.png"))
 plt.show()
