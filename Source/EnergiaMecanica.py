@@ -17,23 +17,22 @@ from pathlib import Path
 import Simulacio as sim
 
 
-def calculEnergia(sist, posicions, i):
+def calculEnergia(sist, data, i):
     """
     Retorna l'energia mecànica del sistema en un instant determinat.
 
         Paràmetres
-            sist: Simulacio.Sistema
-            data: Simulacio.Data
+            sist: obj Simulacio.Sistema
+            data: obj Simulacio.Data
             i: int
         Retorna
             E: np.ndarray
     """
     E = np.zeros(sist.N)
-    vel_inst = sist.vel(posicions, i)
-    pos_inst = (posicions[i, :] + posicions[i-1, :]) / 2.
+    vel_inst = sist.vel(data, i)
+    pos_inst = (data.posicions[i, :] + data.posicions[i-1, :]) / 2. - sist.pos_eq
     E += 0.5*sist.m*vel_inst*vel_inst
     E += 0.5*sist.kg*pos_inst*pos_inst
-
     return E
 
 
@@ -53,26 +52,27 @@ parametres_sist = sim.llegeixMetadata(nom_metadata)
 
 sist = sim.Sistema(**parametres_sist)
 
-t = sim.Data(nom_data).temps
-pos = sim.Data(nom_data).posicions
+data = sim.Data(nom_data)
 
 """
-Generació del vector d'energies
+Generació i del vector d'energies
 """
-energies = np.array([calculEnergia(sist, pos, i) for i in range(1, len(t))])
+energies = np.array([calculEnergia(sist, data, i) for i in range(1, len(data.temps))])
 
-
+"""
+Representació gràfica de les dades
+"""
 default_cycler = (cycler(color=['b', 'g', 'r', 'y', 'm'])
                   + cycler(linestyle=['-', '--', ':', '-.', '--']))
 plt.rc('axes', prop_cycle=default_cycler)
 
 for i in range(sist.N):
-    plt.plot(t[1:]/sist.T0, energies[:, i], label="Bola "+str(i+1))
+    plt.plot(data.temps[1:]/sist.T0, energies[:, i], label="Bola "+str(i+1))
 
 plt.xlabel('t/T0 (-)', fontsize=18)
 plt.ylabel('E (J)', fontsize=18)
-
+plt.legend(loc='lower left')
 
 plt.show()
 
-# plt.savefig("../Simulacions/"+nom_inp+".png")
+# plt.savefig("../Simulacions/"+nom_simulacio+"_Emc.png")

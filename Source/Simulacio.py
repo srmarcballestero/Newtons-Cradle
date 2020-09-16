@@ -225,20 +225,21 @@ class Sistema:
         """
         return (pow(self.xi(self.pos[1, :], i, j), 1.5)-pow(self.xi(self.pos[0, :], i, j), 1.5)) / self.dt
 
-    def vel(self, posicions=None, i=1):
+    def vel(self, data=None, i=1):
         """
-        Retorna les velocitats mitjanes de les boles en un lapse de temps dt.
+        Retorna les velocitats mitjanes de les boles en un lapse de temps.
 
             Paràmetres
-                posicions: np.ndarray (default=None)
-                i: int
+                data: obj .Data (default=None)
+                i: int (default=1)
             Retorna
                 vel(): np.ndarray
         """
-        if posicions is None:
-            posicions = self.pos
+        if data is None:
+            return (self.pos[i, :]-self.pos[i-1, :]) / self.dt
 
-        return (posicions[i, :]-posicions[i-1, :]) / self.dt
+        else:
+            return (data.posicions[i, :]-data.posicions[i-1, :]) / (data.temps[i] - data.temps[i-1])
 
     def acc(self, x, v):
         """

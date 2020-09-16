@@ -35,10 +35,6 @@ sist = sim.Sistema(**parametres_sist)
 t = sim.Data(nom_data).temps
 pos = sim.Data(nom_data).posicions
 
-
-for i in range(np.size(pos, 0)):
-    pos[i, :] += sist.pos_eq
-
 colors = ['b', 'g']
 
 for i in range(sist.N):

@@ -25,11 +25,11 @@ parametres_sist = {
     "N": 2,
     "g": const.g,
     "L": 1.3,
-    "R": 0.025,
-    "gap": 1.0e-3,
+    "R": 0.020,
+    "gap": 2.0e-3,
     "eta": 6.8e-4*1,
     "gamma": 1.47e2*1,
-    "m": np.array([0.1113, 0.1113]),
+    "m": np.array([0.10, 0.10]),
     "E": np.array([2.55e7, 2.55e7]),
     "j": np.array([0.48, 0.48]),
     "pas": 2.5e-1,
@@ -60,7 +60,7 @@ fita = int(progres * sist.iteracions)
 
 inici = time()
 sist.t = sist.rungeKutta()
-sist.escriuData(nom_data, sist.t, sist.pos[0, :]-sist.pos_eq)
+sist.escriuData(nom_data, sist.t, sist.pos[0, :])
 # fitxer.write("%e\n" % (calculEnergia()))
 
 for n in range(1, sist.iteracions):
@@ -75,14 +75,14 @@ for n in range(1, sist.iteracions):
     sist.pos[0, :] = sist.pos[1, :]
     sist.pos[1, :] = sist.pos[2, :]
     if n % salt == 0:
-        sist.escriuData(nom_data, sist.t, sist.pos[0, :] - sist.pos_eq)
+        sist.escriuData(nom_data, sist.t, sist.pos[0, :])
         # fitxer.write("%e\n" % (calculEnergia()))
     if n > fita:
         print("%2.0f %%" % (100*progres), end="")
         print("\t temps restant: %.2f segons" % ((time() - inici) / progres * (1-progres)))
         progres += 0.1
         fita = int(progres * sist.iteracions)
-sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :] - sist.pos_eq)
+sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :])
 # fitxer.write("%e\n" % (calculEnergia()))
 
 print("--- temps total: %.2f segons ---\n" % (time() - inici))
