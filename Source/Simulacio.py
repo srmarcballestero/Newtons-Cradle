@@ -285,7 +285,7 @@ class Sistema:
         amb un pas dt.
 
             Paràmetres
-                dt: float
+                None
             Retorna
                 t + dt: float
         """
