@@ -22,9 +22,9 @@ def llegeixMetadata(nom_metadata):
     Llegeix el conjunt mínim de variables en un fitxer de metadades .dat.
 
     Paràmetres
-        nom_metadata: pathlib.Path  # ruta de l'arxiu de metadades
+        nom_metadata: pathlib.Path              # ruta de l'arxiu de metadades
     Retorna
-        readMetadata(nom_metadata): dict # diccionari de metadades
+        llegeixMetadata(nom_metadata): dict     # diccionari de metadades
     """
     file_metadata = open(nom_metadata, "r")
     metadata = {}
@@ -54,6 +54,7 @@ def llegeixMetadata(nom_metadata):
     file_metadata.close()
 
     return metadata
+
 
 class Sistema():
     """
@@ -327,3 +328,24 @@ class Sistema():
         data.write("%e \n" % (x[self.N-1]))
 
         data.close()
+
+
+class Data():
+    """
+    DOCSTRING.
+
+    A
+    """
+
+    def __init__(self, nom_data):
+        """
+        DOCSTRING.
+
+        A
+        """
+        self.nom_data = nom_data
+
+        data = np.genfromtxt(nom_data, delimiter=",")
+
+        self.temps = data[:, 0]
+        self.posicions = data[:, 1:]
