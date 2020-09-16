@@ -210,7 +210,7 @@ def escriureFitxer(fitxer, t, x):
 
 
 nom_inp = input("Nom de l'execucio?\n")
-fitxer = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".csv"), "w")
+fitxer = open(D), "w")
 metadata = open(Path("/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+nom_inp+".dat"), "w")
 
 metadata.write("%d\n" % (N))
