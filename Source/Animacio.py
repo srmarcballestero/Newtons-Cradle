@@ -124,74 +124,75 @@ class App(tk.Tk):
 
 
 if __name__ == '__main__':
+    pass
 
-    escala = 350
+escala = 350
 
-    g = const.g
+g = const.g
 
-    nom_inp = "../Simulacions/Gaps200dmm/Gaps_2_0_GG_200dmm"
-    metadata = open(nom_inp + ".dat", "r")
+nom_inp = "../Simulacions/Gaps200dmm/Gaps_2_0_GG_200dmm"
+metadata = open(nom_inp + ".dat", "r")
 
-    N = int(metadata.readline())
-    g = float(metadata.readline())
-    L = float(metadata.readline())
-    R = float(metadata.readline())
-    eta = float(metadata.readline())
-    gamma = float(metadata.readline())
-    pas = float(metadata.readline())
-    num_osc = float(metadata.readline())
-    gap = float(metadata.readline())
+N = int(metadata.readline())
+g = float(metadata.readline())
+L = float(metadata.readline())
+R = float(metadata.readline())
+eta = float(metadata.readline())
+gamma = float(metadata.readline())
+pas = float(metadata.readline())
+num_osc = float(metadata.readline())
+gap = float(metadata.readline())
 
-    A = metadata.readline().split(" ")[:-1]
-    m = metadata.readline().split(" ")[:-1]
-    E = metadata.readline().split(" ")[:-1]
-    j = metadata.readline().split(" ")[:-1]
+A = metadata.readline().split(" ")[:-1]
+m = metadata.readline().split(" ")[:-1]
+E = metadata.readline().split(" ")[:-1]
+j = metadata.readline().split(" ")[:-1]
 
-    A = np.array([float(i) for i in A])
-    m = np.array([float(i) for i in m])
-    E = np.array([float(i) for i in E])
-    j = np.array([float(i) for i in j])
-
-
-    T0 = 2*const.pi*np.sqrt(L/g)               #periode dels pèndols
-
-    temps_exec = num_osc*T0                    #temps d'execució
-
-    data = np.genfromtxt(nom_inp+".csv", delimiter=",")
-    pos1 = data[:,1]
-    pos2 = data[:,2]
-    temps = data[:,0]
-
-    pos1 = pos1*escala
-    pos2 = pos2*escala
+A = np.array([float(i) for i in A])
+m = np.array([float(i) for i in m])
+E = np.array([float(i) for i in E])
+j = np.array([float(i) for i in j])
 
 
-    # Initialization of the two pendulums
+T0 = 2*const.pi*np.sqrt(L/g)               #periode dels pèndols
+
+temps_exec = num_osc*T0                    #temps d'execució
+
+data = np.genfromtxt(nom_inp+".csv", delimiter=",")
+pos1 = data[:,1]
+pos2 = data[:,2]
+temps = data[:,0]
+
+pos1 = pos1*escala
+pos2 = pos2*escala
 
 
-    pendulum_1_parameters = {
-        "pos": pos1,
-        "radi": R*escala,
-        "length": L*escala
-    }
+# Initialization of the two pendulums
 
-    pendulum_2_parameters = {
-        "pos": pos2,
-        "radi": R*escala,
-        "length":L*escala
-    }
 
-    pendulum_1 = Pendulum(**pendulum_1_parameters)
-    pendulum_2 = Pendulum(**pendulum_2_parameters)
+pendulum_1_parameters = {
+    "pos": pos1,
+    "radi": R*escala,
+    "length": L*escala
+}
 
-    # Run the animation
-    animation_parameters = {
-        "pendulum_1": pendulum_1,
-        "pendulum_2": pendulum_2,
-        "gap": gap*escala,
-        "temps_exec": temps_exec,
-        "temps": temps,
-        "dt": 0.01
-    }
-    app = App(**animation_parameters)
-    app.mainloop()
+pendulum_2_parameters = {
+    "pos": pos2,
+    "radi": R*escala,
+    "length":L*escala
+}
+
+pendulum_1 = Pendulum(**pendulum_1_parameters)
+pendulum_2 = Pendulum(**pendulum_2_parameters)
+
+# Run the animation
+animation_parameters = {
+    "pendulum_1": pendulum_1,
+    "pendulum_2": pendulum_2,
+    "gap": gap*escala,
+    "temps_exec": temps_exec,
+    "temps": temps,
+    "dt": 0.01
+}
+app = App(**animation_parameters)
+app.mainloop()
