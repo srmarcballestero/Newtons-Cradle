@@ -28,8 +28,8 @@ def simulaSistema(parametres_sist, nom_simulacio):
     Retorna
         None
     """
-    nom_metadata = Path(nom_simulacio+".dat")
-    nom_data = Path(nom_simulacio+".csv")
+    nom_metadata = Path("Metadata/"+nom_simulacio+"_Sim.dat")
+    nom_data = Path("Data/"+nom_simulacio+"_Sim.csv")
 
     sist = sim.Sistema(**parametres_sist)
     sist.escriuMetadata(nom_metadata)
@@ -69,7 +69,7 @@ def simulaSistema(parametres_sist, nom_simulacio):
 
 if __name__ == '__main__':
     """
-    Variables caracterísitques dels sistema.
+    Variables caracterísitques del sistema.
     """
     parametres_sist = {
         "N": 2,
