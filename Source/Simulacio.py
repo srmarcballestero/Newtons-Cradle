@@ -121,7 +121,7 @@ class Sistema:
         self.kg = self.m*self.g / self.L
         self.l0 = np.max(pow(pow(self.m, 2)*pow(self.v, 4) / pow(np.max(self.k), 2), 0.2))
         self.t0 = 0.
-        np.seterr('raise')
+        # np.seterr('raise')
         for i in range(self.N):
             if self.v[i] != 0:
                 oper = pow(np.divide(pow(self.m[i], 2.), pow(self.k[i], 2.)*self.v[i]), 0.2)

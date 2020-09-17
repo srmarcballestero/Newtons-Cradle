@@ -18,71 +18,84 @@ from time import time
 import Simulacio as sim
 
 
-"""
-Variables caracterísitques dels sistema.
-"""
-parametres_sist = {
-    "N": 2,
-    "g": const.g,
-    "L": 1.0,
-    "R": 0.020,
-    "gap": 2.0e-3,
-    "eta": 6.8e-4*1,
-    "gamma": 1.47e2*1,
-    "m": np.array([0.10, 0.10]),
-    "E": np.array([2.55e7, 2.55e7]),
-    "j": np.array([0.48, 0.48]),
-    "pas": 2.5e-2,
-    "num_osc": 10,
-    "salt": 10
-}
-parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
-                                + [0 for i in range(parametres_sist["N"]-1)])
+def simulaSistema(parametres_sist, nom_simulacio):
+    """
+    Itera el mètode de Verlet i genera el fitxer de dades d'una simulació.
 
-"""
-Ús dels fitxer de dades i metadades
-"""
-nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
-nom_simulacio = nom_directori + input("Nom de la simulació?\n")
-nom_metadata = Path(nom_simulacio+".dat")
-nom_data = Path(nom_simulacio+".csv")
+    Paràmetres
+        parametres_sist: dict
+        nom_simulacio: str
+    Retorna
+        None
+    """
+    nom_metadata = Path(nom_simulacio+".dat")
+    nom_data = Path(nom_simulacio+".csv")
+
+    sist = sim.Sistema(**parametres_sist)
+    sist.escriuMetadata(nom_metadata)
+
+    progres = 0.1
+    fita = int(progres * sist.iteracions)
+
+    inici = time()
+    sist.t = sist.rungeKutta()
+    sist.escriuData(nom_data, sist.t, sist.pos[0, :])
+    # fitxer.write("%e\n" % (calculEnergia()))
+
+    for n in range(1, sist.iteracions):
+        dist = 0
+        for j in range(sist.N-1):
+            dist += sist.pos[1, j+1] - sist.pos[1, j]
+        if dist < 3:
+            salt = 100
+        else:
+            salt = 1e5
+        sist.t = sist.verlet()
+        sist.pos[0, :] = sist.pos[1, :]
+        sist.pos[1, :] = sist.pos[2, :]
+        if n % salt == 0:
+            sist.escriuData(nom_data, sist.t, sist.pos[0, :])
+            # fitxer.write("%e\n" % (calculEnergia()))
+        if n > fita:
+            print("%2.0f %%" % (100*progres), end="")
+            print("\t temps restant: %.2f segons" % ((time() - inici) / progres * (1-progres)))
+            progres += 0.1
+            fita = int(progres * sist.iteracions)
+    sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :])
+    # fitxer.write("%e\n" % (calculEnergia()))
+
+    print("--- temps total: %.2f segons ---\n" % (time() - inici))
 
 
-"""
-Iteració del mètode de Verlet
-"""
-sist = sim.Sistema(**parametres_sist)
-sist.escriuMetadata(nom_metadata)
+if __name__ == '__main__':
+    """
+    Variables caracterísitques dels sistema.
+    """
+    parametres_sist = {
+        "N": 2,
+        "g": const.g,
+        "L": 1.0,
+        "R": 0.020,
+        "gap": 2.0e-3,
+        "eta": 6.8e-4*1,
+        "gamma": 1.47e2*1,
+        "m": np.array([0.10, 0.10]),
+        "E": np.array([2.55e7, 2.55e7]),
+        "j": np.array([0.48, 0.48]),
+        "pas": 2.5e-1,
+        "num_osc": 10,
+        "salt": 10
+    }
+    parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
+                                    + [0 for i in range(parametres_sist["N"]-1)])
 
-progres = 0.1
-fita = int(progres * sist.iteracions)
+    """
+    Directoris i fitxers
+    """
+    nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+    nom_simulacio = nom_directori + input("Nom de la simulació?\n")
 
-
-inici = time()
-sist.t = sist.rungeKutta()
-sist.escriuData(nom_data, sist.t, sist.pos[0, :])
-# fitxer.write("%e\n" % (calculEnergia()))
-
-for n in range(1, sist.iteracions):
-    dist = 0
-    for j in range(sist.N-1):
-        dist += sist.pos[1, j+1] - sist.pos[1, j]
-    if dist < 3:
-        salt = 100
-    else:
-        salt = 1e5
-    sist.t = sist.verlet()
-    sist.pos[0, :] = sist.pos[1, :]
-    sist.pos[1, :] = sist.pos[2, :]
-    if n % salt == 0:
-        sist.escriuData(nom_data, sist.t, sist.pos[0, :])
-        # fitxer.write("%e\n" % (calculEnergia()))
-    if n > fita:
-        print("%2.0f %%" % (100*progres), end="")
-        print("\t temps restant: %.2f segons" % ((time() - inici) / progres * (1-progres)))
-        progres += 0.1
-        fita = int(progres * sist.iteracions)
-sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :])
-# fitxer.write("%e\n" % (calculEnergia()))
-
-print("--- temps total: %.2f segons ---\n" % (time() - inici))
+    """
+    Itera el mètode de verlet
+    """
+    simulaSistema(parametres_sist, nom_simulacio)
