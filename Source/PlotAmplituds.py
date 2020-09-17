@@ -6,7 +6,7 @@ Projecte: Newton's Cradle.
  - Mòdul: PlotAmplituds.py
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Representa l'amplitud del moviment en funció del temps.
- - Revisió: 16/09/2020
+ - Revisió: 17/09/2020
 """
 
 import numpy as np
@@ -63,6 +63,8 @@ for nom_simulacio in noms_simulacions:
 
     plt.xlabel("t/T0 (-)", fontsize=18)
     plt.ylabel("x/A (-)", fontsize=18)
+    plt.legend(loc="upper right")
+
     plt.plot(np.array(range(1, int(sist.num_osc)+1)), maxims/np.max(sist.A), '.', color='blue')
 
     nom_figura = Path(nom_directori+"Amplituds/")

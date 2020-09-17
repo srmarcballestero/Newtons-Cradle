@@ -321,7 +321,7 @@ class Sistema:
 class Data:
     """
     Objecte que correspon al conjunt de dades de temps i posicions generades
-    en una simulació, amb mètodes genèrics. Fill de Sistema.
+    en una simulació, amb mètodes genèrics.
     """
 
     def __init__(self, nom_data):

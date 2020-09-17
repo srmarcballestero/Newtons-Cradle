@@ -6,13 +6,14 @@ Projecte: Newton's Cradle.
  - Mòdul: EnergiaMecanica.py
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Calcula i representa l'energia mecànica de les partícules.
- - Revisió: 16/09/2020
+ - Revisió: 17/09/2020
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 from cycler import cycler
 from pathlib import Path
+from os.path import basename
 
 import Simulacio as sim
 
@@ -36,42 +37,57 @@ def calculEnergia(sist, data, i):
     return E
 
 
-"""
-Ús dels fitxer de dades i metadades
-"""
-nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
-nom_simulacio = nom_directori + input("Nom de la simulació?\n")
-nom_metadata = Path(nom_simulacio+".dat")
-nom_data = Path(nom_simulacio+".csv")
+if __name__ == "__main__":
+    """
+    Ús dels fitxer de dades i metadades
+    """
+    inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
+    nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
 
+    noms_simulacions = Path(nom_directori + "/Data/").glob("*Sim*")
 
-"""
-Variables caracterísitques del sistema i generació de l'objecte
-"""
-parametres_sist = sim.llegeixMetadata(nom_metadata)
+    for nom_simulacio in noms_simulacions:
+        """
+        Variables caracterísitques del sistema i generació de l'objecte
+        """
+        nom_simulacio = str(basename(nom_simulacio)).replace(".csv", "")
+        nom_simulacio = nom_simulacio.replace("_Sim", "")
+        nom_data = nom_directori + "Data/" + nom_simulacio + "_Sim.csv"
+        nom_metadata = nom_directori + "Metadata/" + nom_simulacio + "_Sim.dat"
 
-sist = sim.Sistema(**parametres_sist)
+        parametres_sist = sim.llegeixMetadata(nom_metadata)
 
-data = sim.Data(nom_data)
+        sist = sim.Sistema(**parametres_sist)
 
-"""
-Generació i del vector d'energies
-"""
-energies = np.array([calculEnergia(sist, data, i) for i in range(1, len(data.temps))])
+        data = sim.Data(nom_data)
 
-"""
-Representació gràfica de les dades
-"""
-default_cycler = (cycler(color=['b', 'g', 'r', 'y', 'm'])
-                  + cycler(linestyle=['-', '--', ':', '-.', '--']))
-plt.rc('axes', prop_cycle=default_cycler)
+        """
+        Generació del vector d'energies
+        """
+        energies = np.array([calculEnergia(sist, data, i) for i in range(1, len(data.temps))])
 
-for i in range(sist.N):
-    plt.plot(data.temps[1:]/sist.T0, energies[:, i], label="Bola "+str(i+1))
+        """
+        Representació gràfica de les dades
+        """
+        default_cycler = (cycler(color=['b', 'g', 'r', 'y', 'm'])
+                          + cycler(linestyle=['-', '--', ':', '-.', '--']))
+        plt.rc('axes', prop_cycle=default_cycler)
 
-plt.xlabel('t/T0 (-)', fontsize=18)
-plt.ylabel('E (J)', fontsize=18)
-plt.legend(loc='lower left')
+        for i in range(sist.N):
+            plt.plot(data.temps[1:]/sist.T0, energies[:, i], label="Bola "+str(i+1))
 
-plt.savefig("../Simulacions/"+nom_simulacio+"_Emc.png")
-plt.show()
+        plt.xlabel('t/T0 (-)', fontsize=18)
+        plt.ylabel('E (J)', fontsize=18)
+        plt.legend(loc='upper right')
+
+        nom_figura = Path(nom_directori+"Energies/")
+        try:
+            nom_figura.mkdir(parents=True, exist_ok=False)
+        except FileExistsError:
+            pass
+
+        print("Desant figura %s" % (nom_simulacio+"_Emc.png"))
+
+        plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_Emc.png", dpi=600)
+        # plt.show()
+        plt.clf()

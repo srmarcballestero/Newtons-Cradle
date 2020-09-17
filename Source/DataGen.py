@@ -7,7 +7,7 @@ Projecte: Newton's Cradle.
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Simulació del pèndol de Newton integrant numèricament l'equació
    diferencial que el regeix seguint l'algorisme de Verlet.
- - Revisió: 15/09/2020
+ - Revisió: 17/09/2020
 """
 
 import numpy as np

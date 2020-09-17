@@ -6,7 +6,7 @@ Projecte: Newton's Cradle.
  - Mòdul: PlotOscillacions.py
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Representa els punts d'una simulació a escala d'oscil·lacions.
- - Revisió: 16/09/2020
+ - Revisió: 17/09/2020
 """
 
 import matplotlib.pyplot as plt
@@ -52,6 +52,7 @@ for nom_simulacio in noms_simulacions:
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x/R (-)', fontsize=18)
+    plt.legend(loc="upper right")
 
     nom_figura = Path(nom_directori+"Oscillacions/")
     try:
