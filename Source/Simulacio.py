@@ -117,17 +117,18 @@ class Sistema:
         self.T0 = 2.*const.pi*np.sqrt(self.L / self.g)
         self.k = np.append(np.sqrt(2*self.R)*self.E / (3*(1-self.j*self.j)),
                            [0.])
-        self.v = A*np.sqrt(self.g / self.L)
+        self.v = np.fabs(A)*np.sqrt(self.g / self.L)
         self.kg = self.m*self.g / self.L
         self.l0 = np.max(pow(pow(self.m, 2)*pow(self.v, 4) / pow(np.max(self.k), 2), 0.2))
         self.t0 = 0.
+        np.seterr('raise')
         for i in range(self.N):
             if self.v[i] != 0:
+                oper = pow(np.divide(pow(self.m[i], 2.), pow(self.k[i], 2.)*self.v[i]), 0.2)
                 if self.t0 == 0:
-                    self.t0 = pow(pow(self.m[i], 2) / ((pow(self.k[i], 2)*self.v[i])), 0.2)
-                elif pow(pow(self.m[i], 2) / ((pow(self.k[i], 2)*self.v[i])), 0.2) < self.t0:
-                    self.t0 = pow(pow(m[i], 2)/((pow(self.k[i], 2)*self.v[i])), 0.2)
-
+                    self.t0 = oper
+                elif oper < self.t0:
+                    self.t0 = oper
         self.dt = self.pas*self.t0
         self.t = -self.dt
         self.temps_exec = self.num_osc*self.T0

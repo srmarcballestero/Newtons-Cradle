@@ -20,7 +20,7 @@ import Simulacio as sim
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/Simetries/"
 nom_simulacio = nom_directori + input("Nom de la simulació?\n")
 nom_metadata = Path(nom_simulacio+".dat")
 nom_data = Path(nom_simulacio+".csv")
@@ -44,8 +44,8 @@ maxims = np.zeros(int(sist.num_osc))
 
 for i in range(np.size(maxims)):
     while t[j] < (i+1)*sist.T0 and j < np.size(t)-1:
-        if np.fabs(pos[j, 1]) > maxims[i]:
-            maxims[i] = np.fabs(pos[j, 1])
+        if np.fabs(pos[j, 0]) > maxims[i]:
+            maxims[i] = np.fabs(pos[j, 0])
         j += 1
 
 """

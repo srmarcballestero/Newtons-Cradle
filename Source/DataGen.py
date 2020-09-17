@@ -24,7 +24,7 @@ Variables caracterísitques dels sistema.
 parametres_sist = {
     "N": 2,
     "g": const.g,
-    "L": 1.3,
+    "L": 1.0,
     "R": 0.020,
     "gap": 2.0e-3,
     "eta": 6.8e-4*1,
