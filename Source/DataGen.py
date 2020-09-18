@@ -18,18 +18,32 @@ from time import time
 import Simulacio as sim
 
 
-def simulaSistema(parametres_sist, nom_simulacio):
+def simulaSistema(parametres_sist, nom_directori, nom_simulacio):
     """
     Itera el mètode de Verlet i genera el fitxer de dades d'una simulació.
 
     Paràmetres
         parametres_sist: dict
+        nom_directori: str
         nom_simulacio: str
     Retorna
         None
     """
-    nom_metadata = Path("Metadata/"+nom_simulacio+"_Sim.dat")
-    nom_data = Path("Data/"+nom_simulacio+"_Sim.csv")
+    dir_data = Path(nom_directori + "Data/")
+    dir_metadata = Path(nom_directori + "Metadata/")
+
+    try:
+        dir_data.mkdir(parents=True, exist_ok=False)
+    except FileExistsError:
+        pass
+    try:
+        dir_metadata.mkdir(parents=True, exist_ok=False)
+    except FileExistsError:
+        pass
+
+    nom_metadata = Path(str(dir_metadata)+"/"+nom_simulacio+"_Sim.dat")
+    print(str(nom_metadata))
+    nom_data = Path(str(dir_data)+"/"+nom_simulacio+"_Sim.csv")
 
     sist = sim.Sistema(**parametres_sist)
     sist.escriuMetadata(nom_metadata)
@@ -92,10 +106,10 @@ if __name__ == '__main__':
     """
     Directoris i fitxers
     """
-    nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
-    nom_simulacio = nom_directori + input("Nom de la simulació?\n")
+    nom_directori = sim.directori_simulacions
+    nom_simulacio = input("Nom de la simulació?\n")
 
     """
     Itera el mètode de verlet
     """
-    simulaSistema(parametres_sist, nom_simulacio)
+    simulaSistema(parametres_sist, nom_directori, nom_simulacio)

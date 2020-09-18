@@ -39,8 +39,7 @@ class App(tk.Tk):
         self.pendulum_2 = pendulum_2
         self.gap = gap
         self.temps_exec = temps_exec
-        self.escala_moviment = 0.95 * (width - escala * (4. * R + gap)) / (2.*np.max(A) * escala)
-        print(self.escala_moviment)
+        self.escala_moviment = 0.9 * (width - escala * (4. * R + gap)) / (2.*np.max(A) * escala)
 
         # Setting canvas widget
         tk.Tk.__init__(self)
@@ -64,10 +63,10 @@ class App(tk.Tk):
         """Draw the two pendulums"""
 
         # Cartesian coordinates
-        x1 = self.pendulum_1.pos[self.count]*self.escala_moviment
+        x1 = (self.pendulum_1.pos[self.count] - self.pendulum_1.radi - self.gap/2)*self.escala_moviment
         # y1 = self.pendulum_1.length
 
-        x2 = self.pendulum_2.pos[self.count]*self.escala_moviment + self.pendulum_2.radi + self.pendulum_2.radi + self.gap
+        x2 = (self.pendulum_2.pos[self.count] + self.pendulum_2.radi + self.gap/2)*self.escala_moviment
         # y2 = self.pendulum_2.length
 
         # Draw the first pendulum
@@ -77,12 +76,12 @@ class App(tk.Tk):
             width=self.pendulum_1.width, fill='red', tags='pendulum', alpha=0
         )"""
         self.canvas.create_oval(
-            self.offset_width - self.pendulum_1.radi + x1,
+            self.offset_width - self.pendulum_1.radi*self.escala_moviment + x1,
             # self.offset_height - self.pendulum_1.radi + y1,
-            self.offset_height - self.pendulum_1.radi,
-            self.offset_width + self.pendulum_1.radi + x1,
+            self.offset_height - self.pendulum_1.radi*self.escala_moviment,
+            self.offset_width + self.pendulum_1.radi*self.escala_moviment + x1,
             # self.offset_height + self.pendulum_1.radi + y1,
-            self.offset_height + self.pendulum_1.radi,
+            self.offset_height + self.pendulum_1.radi*self.escala_moviment,
             fill='red', outline='red', tags='pendulum'
         )
 
@@ -93,12 +92,12 @@ class App(tk.Tk):
             width=self.pendulum_2.width, fill='blue', tags='pendulum', alpha=0
         )"""
         self.canvas.create_oval(
-            self.offset_width - self.pendulum_2.radi + x2,
+            self.offset_width - self.pendulum_2.radi*self.escala_moviment + x2,
             # self.offset_height - self.pendulum_2.radi + y2,
-            self.offset_height - self.pendulum_2.radi,
-            self.offset_width + self.pendulum_2.radi + x2,
+            self.offset_height - self.pendulum_2.radi*self.escala_moviment,
+            self.offset_width + self.pendulum_2.radi*self.escala_moviment + x2,
             # self.offset_height + self.pendulum_2.radi + y2,
-            self.offset_height + self.pendulum_2.radi,
+            self.offset_height + self.pendulum_2.radi*self.escala_moviment,
             fill='blue', outline='blue', tags='pendulum'
         )
 
@@ -130,18 +129,17 @@ escala = 350
 
 g = const.g
 
-nom_inp = "../Simulacions/Gaps200dmm/Gaps_2_0_GG_200dmm"
-metadata = open(nom_inp + ".dat", "r")
+nom_inp = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/Gammes/"
+metadata = open(nom_inp + "Metadata/Gamma_0_Sim.dat", "r")
 
 N = int(metadata.readline())
 g = float(metadata.readline())
 L = float(metadata.readline())
 R = float(metadata.readline())
+gap = float(metadata.readline())
 eta = float(metadata.readline())
 gamma = float(metadata.readline())
-pas = float(metadata.readline())
-num_osc = float(metadata.readline())
-gap = float(metadata.readline())
+
 
 A = metadata.readline().split(" ")[:-1]
 m = metadata.readline().split(" ")[:-1]
@@ -153,18 +151,20 @@ m = np.array([float(i) for i in m])
 E = np.array([float(i) for i in E])
 j = np.array([float(i) for i in j])
 
+pas = float(metadata.readline())
+num_osc = float(metadata.readline())
 
 T0 = 2*const.pi*np.sqrt(L/g)               #periode dels pèndols
 
 temps_exec = num_osc*T0                    #temps d'execució
 
-data = np.genfromtxt(nom_inp+".csv", delimiter=",")
+data = np.genfromtxt(nom_inp + "Data/Gamma_0_Sim.csv", delimiter=",")
 pos1 = data[:,1]
 pos2 = data[:,2]
 temps = data[:,0]
 
 pos1 = pos1*escala
-pos2 = pos2*escala
+pos2 = (pos2-2*R-gap)*escala
 
 
 # Initialization of the two pendulums
@@ -179,7 +179,7 @@ pendulum_1_parameters = {
 pendulum_2_parameters = {
     "pos": pos2,
     "radi": R*escala,
-    "length":L*escala
+    "length": L*escala
 }
 
 pendulum_1 = Pendulum(**pendulum_1_parameters)

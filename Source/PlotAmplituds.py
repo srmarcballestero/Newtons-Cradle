@@ -50,8 +50,8 @@ for nom_simulacio in noms_simulacions:
 
     for i in range(np.size(maxims)):
         while t[j] < (i+1)*sist.T0 and j < np.size(t)-1:
-            if np.fabs(pos[j, 0]) > maxims[i]:
-                maxims[i] = np.fabs(pos[j, 0])
+            if np.fabs(pos[j, 1]) > maxims[i]:
+                maxims[i] = np.fabs(pos[j, 1])
             j += 1
 
     """

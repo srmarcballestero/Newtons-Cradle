@@ -16,6 +16,11 @@ IMPORTANT: les següents són les dependències d'aquest mòdul
 import numpy as np
 from scipy import constants as const
 
+"""
+Variables globals d'interès
+"""
+directori_simulacions = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+
 
 def llegeixMetadata(nom_metadata):
     """
