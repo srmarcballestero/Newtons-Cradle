@@ -54,10 +54,10 @@ energia_sist = 0.035
 # AVÍS: Només vàlid per boles amb masses idèntiques
 amplituds = np.linspace(np.sqrt(2.*energia_sist / np.max(sist.kg)), np.sqrt(energia_sist / np.max(sist.kg)), 10)
 
-for i in range(len(amplituds)):
+for i, amplitud in enumerate(amplituds):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
 
-    parametres_sist["A"] = np.array([amplituds[i], -1.*np.sqrt(2.*energia_sist / np.max(sist.kg) - pow(amplituds[i], 2.))])
+    parametres_sist["A"] = np.array([amplitud, -1.*np.sqrt(2.*energia_sist / np.max(sist.kg) - pow(amplitud, 2.))])
 
     print("--- Iteració %d ---" % (i+1))
     simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
