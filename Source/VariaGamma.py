@@ -49,7 +49,7 @@ Iteració de les condicions inicials i generació de la Simulació
 """
 
 
-gammes = np.logspace(1, 3, num=10, base=10.)
+gammes = np.logspace(1., 3., num=10, base=10.)
 print(gammes)
 
 for i, gamma in enumerate(gammes):
