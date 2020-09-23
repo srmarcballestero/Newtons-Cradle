@@ -30,7 +30,7 @@ parametres_sist = {
     "m": np.array([0.10, 0.10]),
     "E": np.array([2.55e7, 2.55e7]),
     "j": np.array([0.48, 0.48]),
-    "pas": 2.5e-1,
+    "pas": 2.5e-3,
     "num_osc": 30,
     "salt": 10
 }

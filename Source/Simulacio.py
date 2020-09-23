@@ -18,8 +18,28 @@ from scipy import constants as const
 
 """
 Variables globals d'interès
+    directori_simulacions: directori estàndard on es guarden les dades generades
+    parametres_sist_GG: característiques físiques del sistema goma-goma
 """
 directori_simulacions = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+
+parametres_sist_GG = {
+    "N": 2,
+    "g": const.g,
+    "L": 1.3,
+    "R": 0.010,
+    "gap": 1.0e-3,
+    "eta": 6.8e-4*0,
+    "gamma": 1.47e2*1,
+    "m": np.array([0.10, 0.10]),
+    "E": np.array([2.55e7, 2.55e7]),
+    "j": np.array([0.48, 0.48]),
+    "pas": 2.5e-3,
+    "num_osc": 30,
+    "salt": 10
+}
+parametres_sist_GG["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist_GG["L"]]
+                                   + [0 for i in range(parametres_sist_GG["N"]-1)])
 
 
 def llegeixMetadata(nom_metadata):
