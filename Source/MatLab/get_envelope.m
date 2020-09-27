@@ -1,65 +1,41 @@
 fig = figure();
 posicions = true;
 
-radi_inicial = input("Radi inicial (e-1 mm) ?");
-radi_final = input("Radi final (e-1 mm) ?");
-radi_pas = input("Pas dels radis (e-1 mm) ?");
+inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n", "s");
+nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/";
 
-nom_sim = input("Nom de les simulacions?", 's');
+mkdir([char(nom_directori) 'Envelopes/']);
 
-radi = radi_inicial;
+disp("Accedint al directori"+nom_directori);
 
-while radi <= radi_final
-    
-    nom_carpeta = "../Simulacions/Gaps"+string(radi)+"dmm/";
-    
-    mkdir([char(nom_carpeta) 'Envelopes/']);
-    
-    disp("Accedint al directori"+nom_carpeta);
-    
-    for i = 0:9
-        for j = 0:9
-            str_gap = string(i)+"."+string(j);
-            chr_gap = convertStringsToChars(str_gap);
-            nom_inp = nom_carpeta + "Gaps_"+string(i)+"_"+string(j)+"_"+nom_sim+"_"+string(radi)+"dmm.csv";
-            nom_out = "Gaps_"+string(i)+"_"+string(j)+"_"+nom_sim+"_"+string(radi)+"dmm_Env";;
+noms_metadata = dir(fullfile(nom_directori+"Metadata/", "*Sim.dat"));
 
-            d = dir(nom_inp);
+for iter_fitxer = 1:length(noms_data)
+  disp("Llegint el fitxer: "+"Metadata/"+noms_metadata(iter_fitxer).name)
+  disp("Llegint el fitxer: "+"Data/"+strrep(noms_metadata(iter_fitxer).name, ".dat", ".csv"))
+  fitxer_metadata = fopen(char(nom_directori+"Metadata/"+noms_metadata(iter_fitxer).name), "r");
+  fitxer_data = char(nom_directori+"Data/"+strrep(noms_metadata(iter_fitxer).name, '.dat', '.csv'));
+  metadata = get_metadata(fitxer_metadata);
+  fclose(fitxer_metadata);
+  data = csvread(fitxer_data, 0, 0);
 
-            if isempty(d)
-                disp("No s'ha trobat el fitxer"+nom_inp);
-                continue;
-            end
+  pos1 = data(:,1:2);
+  pos2 = [data(:,1), data(:,3)];
 
-            disp("Llegint l'arxiu "+nom_inp);
+  [env1up, env1lo] = envelope(pos1, 400, 'peak');
+  [env2up, env2lo] = envelope(pos2, 400, 'peak');
 
-            data = csvread(nom_inp, 0, 0);
-            pos1 = data(:,1:2);
-            pos2 = [data(:,1), data(:,3)];
-
-            [env1up, env1lo] = envelope(pos1, 400, 'peak');
-            [env2up, env2lo] = envelope(pos2, 400, 'peak');
-
-            csvwrite(nom_carpeta+"Envelopes/"+nom_out+".csv", [env1up,env1lo,env2up,env2lo]);
-
-
-            hold on;
-            plot(env1up(:,1),env1up(:,2), 'blue');
-            plot(env1lo(:,1),env1lo(:,2), 'blue');
-%             plot(env2up(:,1),env2up(:,2), 'red');
-%             plot(env2lo(:,1),env2lo(:,2), 'red');
-            if posicions
-                plot(pos1(:,1), pos1(:,2), 'cyan');
-%                 plot(pos2(:,1), pos2(:,2), 'magenta');
-            end
-            hold off;
-            saveas(fig, nom_carpeta+"Envelopes/"+nom_out+".png");
-            clf();
-        end
+  csvwrite(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env.csv'), [env1up,env1lo,env2up,env2lo]);
+  hold on;
+    plot(env1up(:,1),env1up(:,2), 'blue');
+    plot(env1lo(:,1),env1lo(:,2), 'blue');
+    plot(env2up(:,1),env2up(:,2), 'red');
+    plot(env2lo(:,1),env2lo(:,2), 'red');
+    if posicions
+        plot(pos1(:,1), pos1(:,2), 'cyan');
+        plot(pos2(:,1), pos2(:,2), 'magenta');
     end
-    
-    radi = radi + radi_pas;
-        
+  hold off;
+  saveas(fig, nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env.png'));
+  clf();
 end
-
-clf();
