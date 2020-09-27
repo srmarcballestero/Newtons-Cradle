@@ -1,13 +1,4 @@
-fig = figure;
-
-radi_inicial = input("Radi inicial (e-1 mm) ?");
-radi_final = input("Radi final (e-1 mm) ?");
-radi_pas = input("Pas dels radis (e-1 mm) ?");
-
-nom_sim = input("Nom de les simulacions?", 's');
-
-radi = radi_inicial;
-
+fig = figure();
 while radi <= radi_final
 
     nom_carpeta = "../Simulacions/Gaps"+string(radi)+"dmm/Envelopes/";
