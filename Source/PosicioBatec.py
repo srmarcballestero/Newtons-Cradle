@@ -3,16 +3,17 @@
 """
 Projecte: Newton's Cradle.
 
- - Mòdul: PlotAmplituds.py
+ - Mòdul: PosicioBatec.py
  - Autors: Parker, Neil i Ballestero, Marc.
- - Descripció: Representa l'amplitud del moviment en funció del temps.
- - Revisió: 17/09/2020
+ - Descripció: Troba la posició del primer batec.
+ - Revisió: 26/09/2020
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from os.path import basename
+from os import listdir
 from cycler import cycler
 
 import Simulacio as sim
@@ -32,7 +33,7 @@ try:
 except FileExistsError:
     pass
 
-t_vs_gamma = np.empty((10, 2))
+t_vs_var = np.empty((len(listdir(Path(nom_directori + "/Data/"))), 2))
 
 for iter, nom_simulacio in enumerate(noms_simulacions):
     """
@@ -51,6 +52,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 
     t = data[:, 0]
     amps = data[:, 1]
+    var = sist.gamma
 
     """
     Detecció del primer mínim en les amplituds
@@ -73,14 +75,21 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     plt.ylabel("$t/T_0$ (-)", fontsize=18)
     # plt.legend(loc="upper right")
 
-    t_vs_gamma[iter] = np.array([sist.gamma, t_batec/sist.T0])
+    t_vs_var[iter] = np.array([var, t_batec/sist.T0])
 
-    plt.plot(sist.gamma, t_batec/sist.T0, '.', color='blue')
-    print("Gamma = %.2e" % (sist.gamma))
+    plt.plot(var, t_batec/sist.T0, '.', color='blue')
+    print("Variable = %.2e" % (var))
 
 
 plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_GammaVsBatec.png")
-print(t_vs_gamma[:, 0])
-print(t_vs_gamma[:, 1])
+
+for i in range(np.size(t_vs_var[:, 0])-1):
+    print(float(t_vs_var[i, 0]), "," , end = '')
+print(float(t_vs_var[np.size(t_vs_var[:, 0])-1, 0]))
+print("\n")
+for i in range(np.size(t_vs_var[:, 1])-1):
+    print(float(t_vs_var[i, 1]), ",", end = '')
+print(float(t_vs_var[np.size(t_vs_var[:, 1])-1, 1]))
+
 # plt.show()
 plt.clf()
