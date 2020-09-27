@@ -3,11 +3,10 @@
 """
 Projecte: Newton's Cradle.
 
- - Mòdul: DataGen.py
+ - Mòdul: VariaGamma.py
  - Autors: Parker, Neil i Ballestero, Marc.
- - Descripció: Simulació del pèndol de Newton integrant numèricament l'equació
-   diferencial que el regeix seguint l'algorisme de Verlet.
- - Revisió: 17/09/2020
+ - Descripció: Fer simulacions per gammes diferents.
+ - Revisió: 27/09/2020
 """
 
 import numpy as np
@@ -30,7 +29,7 @@ parametres_sist = {
     "m": np.array([0.10, 0.10]),
     "E": np.array([2.55e7, 2.55e7]),
     "j": np.array([0.48, 0.48]),
-    "pas": 2.5e-3,
+    "pas": 2.5e-2,
     "num_osc": 30,
     "salt": 10
 }
@@ -47,10 +46,7 @@ nom_simulacio = input("Nom de la simulació?\n")
 """
 Iteració de les condicions inicials i generació de la Simulació
 """
-
-
-gammes = np.logspace(1., 3., num=10, base=10.)
-print(gammes)
+gammes = np.linspace(1.e1, 1.e3, num=30)
 
 for i, gamma in enumerate(gammes):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)

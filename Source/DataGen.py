@@ -42,7 +42,6 @@ def simulaSistema(parametres_sist, nom_directori, nom_simulacio):
         pass
 
     nom_metadata = Path(str(dir_metadata)+"/"+nom_simulacio+"_Sim.dat")
-    print(str(nom_metadata))
     nom_data = Path(str(dir_data)+"/"+nom_simulacio+"_Sim.csv")
 
     sist = sim.Sistema(**parametres_sist)
