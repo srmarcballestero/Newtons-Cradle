@@ -52,7 +52,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 
     t = data[:, 0]
     amps = data[:, 1]
-    var = sist.gamma
+    var = sist.gap
 
     """
     Detecció del primer mínim en les amplituds
