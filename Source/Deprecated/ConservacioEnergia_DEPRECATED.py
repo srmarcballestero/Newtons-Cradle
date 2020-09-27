@@ -77,7 +77,7 @@ def escriureFitxer(fitxer, t, x):
     for i in range(N-1):
         fitxer.write("%e," % (x[i]))
     fitxer.write("%e," % (x[N-1]))
-    
+
 def calculEnergia():
     E = 0
     vel_inst = (pos[1,:]-pos[0,:])/dt
@@ -85,9 +85,9 @@ def calculEnergia():
     for j in range(N):
         E += 0.5*m*vel_inst[j]*vel_inst[j]
         E += 0.5*kg*(pos_inst[j]-pos_eq[j])*(pos_inst[j]-pos_eq[j])
-        
+
     return E
-    
+
 
 
 
@@ -103,7 +103,7 @@ i = 0
 print(passos)
 
 for pas in passos:
-    
+
     dt = pas*t0
     iteracions = int(temps_simulacio/dt)
 
@@ -154,7 +154,7 @@ for pas in passos:
     escriureFitxer(fitxer, t+dt, pos[0,:]-pos_eq)
     fitxer.write("%e\n" % (calculEnergia()))
     fitxer.close()
-    
+
     tempsExecucio[i] = time.time() - inici
 
     # Llegeixo les dades del fitxer
@@ -163,10 +163,10 @@ for pas in passos:
     posicio = data[:,1:-1]
     temps = data[:,0]
     energia = data[:,-1]
-  
+
     E_inici = energia[0]          #energia inicial del sistema
     E_final = energia[-1]          #energia final del sistema
-    
+
     varEnergia[i] = np.fabs((E_final-E_inici)/E_inici*100)
 
     print(i)
