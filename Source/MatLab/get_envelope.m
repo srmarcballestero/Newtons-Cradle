@@ -25,7 +25,7 @@ for iter_fitxer = 1:length(noms_metadata)
 
   [env1up, env1lo] = envelope(pos1, 400, 'peak');
   [env2up, env2lo] = envelope(pos2, 400, 'peak');
-  
+
   max1lo = islocalmax(env1lo(:,2));
   min1lo = islocalmin(env1lo(:,2));
   max1up = islocalmax(env1up(:,2));
@@ -35,7 +35,7 @@ for iter_fitxer = 1:length(noms_metadata)
   min2lo = islocalmin(env2lo(:,2));
   max2up = islocalmax(env2up(:,2));
   min2up = islocalmin(env2up(:,2));
-  
+
   env1loX = env1lo(:,1);
   env1loY = env1lo(:,2);
   env1upX = env1up(:,1);
@@ -45,9 +45,9 @@ for iter_fitxer = 1:length(noms_metadata)
   env2loY = env2lo(:,2);
   env2upX = env2up(:,1);
   env2upY = env2up(:,2);
-  
+
   csvwrite(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env.csv'), [env1up,env1lo,env2up,env2lo]);
-  
+
   csvwrite(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', "Env_1_LoMax.csv"), [env1loX(max1lo), env1loY(max1lo)]);
   csvwrite(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', "Env_1_LoMin.csv"), [env1loX(min1lo), env1loY(min1lo)]);
   csvwrite(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', "Env_1_UpMax.csv"), [env1upX(max1up), env1loY(max1up)]);
@@ -63,10 +63,10 @@ for iter_fitxer = 1:length(noms_metadata)
     plot(env1lo(:,1),env1lo(:,2), 'blue');
     plot(env2up(:,1),env2up(:,2), 'red');
     plot(env2lo(:,1),env2lo(:,2), 'red');
-    
+
     plot(pos1(:,1), pos1(:,2), 'cyan');
     plot(pos2(:,1), pos2(:,2), 'magenta');
-    
+
     plot(env1loX(max1lo),env1loY(max1lo), 'r*');
     plot(env1loX(min1lo),env1loY(min1lo), 'r*');
     plot(env1upX(max1up),env1upY(max1up), 'g*');
@@ -77,8 +77,8 @@ for iter_fitxer = 1:length(noms_metadata)
     plot(env2upX(max2up),env2upY(max2up), 'r*');
     plot(env2upX(min2up),env2upY(min2up), 'r*');
   hold off;
-  
-  saveas(fig, nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env.png')); 
+
+  saveas(fig, nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env.png'));
   clf();
 end
 close all;

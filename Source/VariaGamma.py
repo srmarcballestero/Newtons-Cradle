@@ -39,14 +39,14 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = sim.directori_simulacions + "Gammes/"
+nom_directori = sim.directori_simulacions + "Gammes_RegioBona/"
 nom_simulacio = input("Nom de la simulació?\n")
 
 
 """
 Iteració de les condicions inicials i generació de la Simulació
 """
-gammes = np.linspace(1.e1, 1.e3, num=30)
+gammes = np.linspace(50, 400, num=30)
 
 for i, gamma in enumerate(gammes):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
