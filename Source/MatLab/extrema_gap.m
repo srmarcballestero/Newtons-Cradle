@@ -25,7 +25,7 @@ for iter_fitxer = 1:length(noms_metadata)
   temps = [temps, data_maxs(1, 1)];
 
 
-  scatter(gammes, temps, [], ints, 'filled');
+  
 
 
 %   [xData, yData] = prepareCurveData(gammes, temps);
@@ -40,6 +40,5 @@ for iter_fitxer = 1:length(noms_metadata)
 %   fprintf(out, "%e\n%e\n%e\n%e\n%e\n%e\n%e\n", fitresult.a, fitresult.b, gof.sse, gof.rsquare, gof.dfe, gof.adjrsquare, gof.rmse);
 %   fclose(out);
 
-  clf();
-
 end
+scatter(gammes, temps, [], ints, 'filled');
