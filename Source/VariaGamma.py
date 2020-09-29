@@ -46,7 +46,7 @@ nom_simulacio = input("Nom de la simulació?\n")
 """
 Iteració de les condicions inicials i generació de la Simulació
 """
-gammes = np.linspace(50, 400, num=30)
+gammes = np.linspace(50, 1500, num=200)
 
 for i, gamma in enumerate(gammes):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
