@@ -1,65 +1,46 @@
-fig = figure();
-while radi <= radi_final
+inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n", "s");
+nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/";
 
-    nom_carpeta = "../Simulacions/Gaps"+string(radi)+"dmm/Envelopes/";
-    nom_out = nom_carpeta + "Gaps_"+nom_sim+"_"+string(radi)+"dmm_Fit_PosGap";
-    disp("Accedint al directori"+nom_carpeta);
 
-    gap_first = [];
+disp("Accedint al directori"+nom_directori);
 
-    for i = 0:9
-        for j = 0:9
+noms_metadata = dir(fullfile(nom_directori+"Metadata/", "*Sim.dat"));
+nom_envelopes = nom_directori+"Envelopes/";
 
-            nom_inp_ini = nom_carpeta+"Gaps_"+string(i)+"_"+string(j)+"_"+nom_sim+"_"+string(radi)+"dmm_Ext_1_UpMax.csv";
-            nom_inp_maxs = nom_carpeta+"Gaps_"+string(i)+"_"+string(j)+"_"+nom_sim+"_"+string(radi)+"dmm_Ext_2_UpMax.csv";
+gammes = [];
+temps = [];
+ints = [];
 
-            str_gap = string(i)+"."+string(j);
-            gap = double(str_gap);
+for iter_fitxer = 1:length(noms_metadata)
+  disp("Llegint el fitxer: "+"Metadata/"+noms_metadata(iter_fitxer).name);
+  fitxer_metadata = fopen(char(nom_directori+"Metadata/"+noms_metadata(iter_fitxer).name), "r");
+  metadata = get_metadata(fitxer_metadata);
+  gammes = [gammes, metadata.gamma];
+  fclose(fitxer_metadata);
 
-            d1 = dir(nom_inp_ini);
-            d2 = dir(nom_inp_maxs);
+  fitxer_maxs = char(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env_1_UpMax.csv'));
+  data_maxs = csvread(fitxer_maxs);
 
-            if isempty(d1) || isempty(d2)
-                continue;
-            end
+  ints = [ints, data_maxs(1, 2)]
+  temps = [temps, data_maxs(1, 1)];
 
-            disp("Llegint l'arxiu "+nom_inp_ini);
-            disp("Llegint l'arxiu "+nom_inp_maxs);
 
-            d1 = dir(nom_inp_ini);
-            d2 = dir(nom_inp_maxs);
-            if d1.bytes==0 || d2.bytes==0
-                continue;
-            end
+  scatter(gammes, temps, [], ints, 'filled');
 
-            mins = csvread(nom_inp_ini, 0, 0);
-            maxs = csvread(nom_inp_maxs, 0, 0);
 
-            gap_first = [gap_first;[gap, mins(1,1), maxs(1,2)]];
-        end
-    end
+  [xData, yData] = prepareCurveData(gaps, poss);
 
-    gaps = gap_first(:,1);
-    poss = gap_first(:,2);
-    ints = gap_first(:,3);
+  ft = fittype( 'power1' );
+  opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+  opts.Display = 'Off';
 
-    scatter(gaps, poss, [], ints, 'filled');
+  [fitresult, gof] = fit( xData, yData, ft, opts );
 
-    saveas(fig, nom_out+".png");
+  out = fopen(nom_out+".dat", "w");
+  fprintf(out, "%e\n%e\n%e\n%e\n%e\n%e\n%e\n", fitresult.a, fitresult.b, gof.sse, gof.rsquare, gof.dfe, gof.adjrsquare, gof.rmse);
+  fclose(out);
 
-    [xData, yData] = prepareCurveData(gaps, poss);
+  clf();
 
-    ft = fittype( 'power2' );
-    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
-    opts.Display = 'Off';
-
-    [fitresult, gof] = fit( xData, yData, ft, opts );
-
-    out = fopen(nom_out+".dat", "w");
-    fprintf(out, "%e\n%e\n%e\n%e\n%e\n%e\n%e\n%e\n", fitresult.a, fitresult.b, fitresult.c, gof.sse, gof.rsquare, gof.dfe, gof.adjrsquare, gof.rmse);
-    fclose(out);
-
-    clf();
-
-    radi = radi + radi_pas;
+  radi = radi + radi_pas;
 end
