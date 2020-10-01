@@ -37,7 +37,7 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
                                 + [0 for i in range(parametres_sist["N"]-1)])
 
 """
-Ús dels fitxer de dades i metadadess
+Ús dels fitxer de dades i metadades
 """
 nom_directori = sim.directori_simulacions + "Gaps/"
 nom_simulacio = input("Nom de la simulació?\n")

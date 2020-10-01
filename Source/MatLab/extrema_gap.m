@@ -7,18 +7,23 @@ disp("Accedint al directori"+nom_directori);
 noms_metadata = dir(fullfile(nom_directori+"Metadata/", "*Sim.dat"));
 nom_envelopes = nom_directori+"Envelopes/";
 
-gammes = [];
+gaps = [];
 temps = [];
 ints = [];
 
 for iter_fitxer = 1:length(noms_metadata)
+  fitxer_maxs = char(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env_1_UpMax.csv'));
+  if dir(fitxer_maxs).bytes == 0
+      continue;
+  end
+  
   disp("Llegint el fitxer: "+"Metadata/"+noms_metadata(iter_fitxer).name);
   fitxer_metadata = fopen(char(nom_directori+"Metadata/"+noms_metadata(iter_fitxer).name), "r");
   metadata = get_metadata(fitxer_metadata);
-  gammes = [gammes, metadata.gamma];
+  gaps = [gaps, metadata.gap];
   fclose(fitxer_metadata);
 
-  fitxer_maxs = char(nom_directori+"Envelopes/"+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Env_1_UpMax.csv'));
+
   data_maxs = csvread(fitxer_maxs);
 
   ints = [ints, data_maxs(1, 2)];
@@ -41,4 +46,4 @@ for iter_fitxer = 1:length(noms_metadata)
 %   fclose(out);
 
 end
-scatter(gammes, temps, [], ints, 'filled');
+scatter(gaps, temps, [], ints, 'filled');
