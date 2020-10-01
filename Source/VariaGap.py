@@ -37,7 +37,7 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
                                 + [0 for i in range(parametres_sist["N"]-1)])
 
 """
-Ús dels fitxer de dades i metadades
+Ús dels fitxer de dades i metadadess
 """
 nom_directori = sim.directori_simulacions + "Gaps/"
 nom_simulacio = input("Nom de la simulació?\n")
@@ -46,7 +46,7 @@ nom_simulacio = input("Nom de la simulació?\n")
 """
 Iteració de les condicions inicials i generació de la Simulació
 """
-gaps = np.linspace(0, 1.0e-2, num=30)
+gaps = np.linspace(0., 1.e-2, num=100)
 
 for i, gap in enumerate(gaps):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
