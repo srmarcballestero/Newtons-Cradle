@@ -14,7 +14,7 @@ from pathlib import Path
 from os.path import basename
 
 import Simulacio as sim
-
+from DataGen import printProgressBar
 
 """
 Ús dels fitxer de dades i metadades
@@ -60,7 +60,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     except FileExistsError:
         pass
 
-    print("%d %% - Desant figura %s" % (int(iter/len(noms_simulacions) * 100), nom_simulacio+"_OscAbs.png"))
+    printProgressBar(iter, len(noms_simulacions), prefix='Progrés:', suffix='Complet', length=50)
 
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_OscAbs.png")
     # plt.show()

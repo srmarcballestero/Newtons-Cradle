@@ -18,6 +18,31 @@ from time import time
 import Simulacio as sim
 
 
+def printProgressBar(iter, total, prefix='', sufix='', decimals=1, len=100, fill='█', printEnd='\r'):
+    r"""
+    Crea una barra de progrés a la sortida.
+
+        Paràmetres
+            iter: int
+            total: int
+            prefix: str (default = '')
+            sufix: str (default = '')
+            decimals: int (default = 1)
+            len: int (default = 100)
+            fill: str (default = '█')
+            printEnd: str (default = '\r')
+        Retorna
+            None
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iter / float(total)))
+    filledLen = int(len * iter // total)
+    bar = fill * filledLen + '-' * (len - filledLen)
+    print(f'\r{prefix} |{bar}| {percent}% {sufix}', end=printEnd)
+
+    if iter == total:
+        print()
+
+
 def simulaSistema(parametres_sist, nom_directori, nom_simulacio):
     """
     Itera el mètode de Verlet i genera el fitxer de dades d'una simulació.
