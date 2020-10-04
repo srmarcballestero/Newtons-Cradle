@@ -14,6 +14,7 @@ from pathlib import Path
 from os.path import basename
 
 import Simulacio as sim
+from DataGen import printProgressBar
 
 
 """
@@ -30,9 +31,9 @@ try:
 except FileExistsError:
     pass
 
-noms_simulacions = Path(nom_directori + "/Data/").glob("*Sim*")
+noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
-for nom_simulacio in noms_simulacions:
+for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Variables caracterísitques del sistema i generació de l'objecte
     """
@@ -56,9 +57,7 @@ for nom_simulacio in noms_simulacions:
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_CM (-)', fontsize=18)
-    plt.legend(loc="upper right")
-
-    print("Desant figura %s" % (nom_simulacio+"_CM.png"))
+    # plt.legend(loc="upper right")
 
     plt.savefig(str(nom_cm)+"/"+nom_simulacio+"_CM.png")
     # plt.show()
@@ -72,9 +71,9 @@ for nom_simulacio in noms_simulacions:
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_r (-)', fontsize=18)
-    plt.legend(loc="upper right")
+    # plt.legend(loc="upper right")
 
-    print("Desant figura %s" % (nom_simulacio+"_Rel.png"))
+    printProgressBar(iter, len(noms_simulacions))
 
     plt.savefig(str(nom_rel)+"/"+nom_simulacio+"_Rel.png")
     # plt.show()

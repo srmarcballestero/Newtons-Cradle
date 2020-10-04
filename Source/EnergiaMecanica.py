@@ -16,6 +16,7 @@ from pathlib import Path
 from os.path import basename
 
 import Simulacio as sim
+from DataGen import printProgressBar
 
 
 def calculEnergia(sist, data, i):
@@ -44,9 +45,9 @@ if __name__ == "__main__":
     inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
     nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
 
-    noms_simulacions = Path(nom_directori + "/Data/").glob("*Sim*")
+    noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
-    for nom_simulacio in noms_simulacions:
+    for iter, nom_simulacio in enumerate(noms_simulacions):
         """
         Variables caracterísitques del sistema i generació de l'objecte
         """
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         except FileExistsError:
             pass
 
-        print("Desant figura %s" % (nom_simulacio+"_Emc.png"))
+        printProgressBar(iter, len(noms_simulacions))
 
         plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_Emc.png", dpi=600)
         # plt.show()

@@ -60,7 +60,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     except FileExistsError:
         pass
 
-    printProgressBar(iter, len(noms_simulacions), prefix='Progrés:', suffix='Complet', length=50)
+    printProgressBar(iter, len(noms_simulacions))
 
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_OscAbs.png")
     # plt.show()

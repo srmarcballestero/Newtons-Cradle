@@ -39,7 +39,7 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = sim.directori_simulacions + "Gammes_RegioBona/"
+nom_directori = sim.directori_simulacions + "Gammes/"
 nom_simulacio = input("Nom de la simulació?\n")
 
 
