@@ -22,9 +22,9 @@ import Simulacio as sim
 inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
 nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
 
-noms_simulacions = Path(nom_directori + "/Data/").glob("*Sim*")
+noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
-for nom_simulacio in noms_simulacions:
+for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Variables caracterísitques del sistema i generació de l'objecte
     """
@@ -60,7 +60,7 @@ for nom_simulacio in noms_simulacions:
     except FileExistsError:
         pass
 
-    print("Desant figura %s" % (nom_simulacio+"_OscAbs.png"))
+    print("%d %% - Desant figura %s" % (int(iter/len(noms_simulacions) * 100), nom_simulacio+"_OscAbs.png"))
 
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_OscAbs.png")
     # plt.show()
