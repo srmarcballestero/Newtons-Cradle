@@ -14,11 +14,13 @@ import numpy as np
 from scipy import constants as const
 from pathlib import Path
 from time import time
+from datetime import timedelta
 
 import Simulacio as sim
 
 
-def printProgressBar(iter, total, prefix='Progrés', sufix='complet', decimals=1, len=50, fill='█', printEnd='\r', temps_restant=0.):
+def printProgressBar(iter, total, prefix='Progrés', sufix='complet', decimals=1,
+                     len=50, fill='█', printEnd='\r', temps_restant=0.):
     r"""
     Crea una barra de progrés a la sortida.
 
@@ -39,7 +41,7 @@ def printProgressBar(iter, total, prefix='Progrés', sufix='complet', decimals=1
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iter / float(total)))
     filledLen = int(len * iter // total)
     bar = fill * filledLen + '-' * (len - filledLen)
-    print(f'\r{prefix} |{bar}| {percent}% {sufix} ETA {temps_restant:.2f} s', end=printEnd)
+    print(f'\r{prefix} |{bar}| {percent}% {sufix} temps restant {str(timedelta(seconds=temps_restant)).split(".")[0]}', end=printEnd)
 
     if iter == total:
         print()
@@ -100,11 +102,12 @@ def simulaSistema(parametres_sist, nom_directori, nom_simulacio):
             t_restant = (time() - inici) / progres * (1-progres)
             progres += 0.001
             fita = int(progres * sist.iteracions)
-        printProgressBar(n, sist.iteracions, len=20, sufix='', temps_restant=t_restant)
+        printProgressBar(n, sist.iteracions, len=30, sufix='', temps_restant=t_restant)
     sist.escriuData(nom_data, sist.t + sist.dt, sist.pos[1, :])
     # fitxer.write("%e\n" % (calculEnergia()))
 
-    print("--- temps total: %.2f segons ---\n" % (time() - inici))
+    # print("--- temps d'execució: %.2f segons ---\n" % (time() - inici))
+    return time() - inici
 
 
 if __name__ == '__main__':

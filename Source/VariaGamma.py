@@ -11,6 +11,7 @@ Projecte: Newton's Cradle.
 
 import numpy as np
 from scipy import constants as const
+from datetime import timedelta
 
 import Simulacio as sim
 from DataGen import simulaSistema
@@ -39,13 +40,15 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = sim.directori_simulacions + "Gammes/"
+nom_directori = sim.directori_simulacions + "GammesRegioBona/"
 nom_simulacio = input("Nom de la simulació?\n")
 
 
 """
 Iteració de les condicions inicials i generació de la Simulació
 """
+t_acum = 0.
+
 gammes = np.linspace(50, 1500, num=200)
 
 for i, gamma in enumerate(gammes):
@@ -54,5 +57,8 @@ for i, gamma in enumerate(gammes):
     parametres_sist["gamma"] = gamma
     sist = sim.Sistema(**parametres_sist)
 
-    print("--- Iteració %d ---" % (i+1))
-    simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
+    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gammes), i+1 / len(gammes) * 100.))
+    t_exec = simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
+    t_acum += t_exec
+    print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'
+          + f'| --- temps acumulat: {str(timedelta(seconds=t_acum)).split(".")[0]}.{str(timedelta(seconds=t_acum)).split(".")[1][:2]} ---\n')

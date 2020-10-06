@@ -59,6 +59,13 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     plt.ylabel('x_CM (-)', fontsize=18)
     # plt.legend(loc="upper right")
 
+    data_cm = open(str(nom_cm)+"/"+nom_simulacio+"_CM.csv", "w")
+
+    for i, temps in enumerate(t):
+        data_cm.write("%e,%e\n" % (temps/sist.T0, .5*(pos[i, 0] + pos[i, 1])))
+
+    data_cm.close()
+
     plt.savefig(str(nom_cm)+"/"+nom_simulacio+"_CM.png")
     # plt.show()
     plt.clf()
@@ -73,7 +80,14 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     plt.ylabel('x_r (-)', fontsize=18)
     # plt.legend(loc="upper right")
 
-    printProgressBar(iter, len(noms_simulacions))
+    data_rel = open(str(nom_rel)+"/"+nom_simulacio+"_Rel.csv", "w")
+
+    for i, temps in enumerate(t):
+        data_rel.write("%e,%e\n" % (temps/sist.T0, -.5*(pos[i, 0] - pos[i, 1])))
+
+    data_rel.close()
+
+    printProgressBar(iter, len(noms_simulacions), len=30)
 
     plt.savefig(str(nom_rel)+"/"+nom_simulacio+"_Rel.png")
     # plt.show()
