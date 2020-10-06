@@ -68,5 +68,5 @@ for i, var in enumerate(vars):
     ts_exec.append(t_exec)
     t_iter = np.mean(ts_exec)
     t_acum += t_exec
-    print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'
-          + f'| --- temps acumulat: {str(timedelta(seconds=t_acum)).split(".")[0]}.{str(timedelta(seconds=t_acum)).split(".")[1][:2]} ---\n')
+    print(f'--- Temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} '
+          + f'| --- Temps acumulat: {str(timedelta(seconds=t_acum)).split(".")[0]}.{str(timedelta(seconds=t_acum)).split(".")[1][:2]} ---\n')
