@@ -3,7 +3,7 @@
 """
 Projecte: Newton's Cradle.
 
- - Mòdul: Variavar.py
+ - Mòdul: VariaParametre.py
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Fer simulacions iterant un paràmetre.
  - Revisió: 06/10/2020
