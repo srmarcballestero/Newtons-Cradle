@@ -23,7 +23,6 @@ from DataGen import printProgressBar
 inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
 nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
 
-# ATENCIÓ: canviar *Sim* per *Rel*
 noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
 for iter, nom_simulacio in enumerate(noms_simulacions):
@@ -34,7 +33,6 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     nom_simulacio = nom_simulacio.replace("_Sim", "")
     nom_data = nom_directori + "Data/" + nom_simulacio + "_Sim.csv"
     nom_metadata = nom_directori + "Metadata/" + nom_simulacio + "_Sim.dat"
-    # ATENCIÓ: canviar _Sim per _Rel
     nom_rel = nom_directori + "CmRel/Rel/" + nom_simulacio + "_Rel.csv"
 
     parametres_sist = sim.llegeixMetadata(nom_metadata)
