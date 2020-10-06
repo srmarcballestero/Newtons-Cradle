@@ -30,7 +30,7 @@ parametres_sist = {
     "m": np.array([0.10, 0.10]),
     "E": np.array([2.55e7, 2.55e7]),
     "j": np.array([0.48, 0.48]),
-    "pas": 2.5e-1,
+    "pas": 2.5e-2,
     "num_osc": 30,
     "salt": 10
 }
@@ -47,11 +47,13 @@ nom_directori = sim.directori_simulacions + nom_simulacio + "/"
 Iteració de les condicions inicials i generació de la Simulació
     var: str (nom del paràmetre del sistema a iterar)
 """
-t_acum = 0.
-
 nom_var = "gamma"
 
 vars = np.linspace(50, 1500, num=200)
+
+t_acum = 0.
+ts_exec = []
+t_iter = 0.
 
 for i, var in enumerate(vars):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
@@ -60,9 +62,11 @@ for i, var in enumerate(vars):
 
     sist = sim.Sistema(**parametres_sist)
 
-    print(f"--- {nom_var} = {var:.2f} ---".upper())
-    print("--- Iteració %d / %d | Progrés total %.1f %% ---" % (i+1, len(vars), (i+1) / len(vars) * 100.))
+    print(f'--- Iteració {i+1} / {len(vars)} | Progrés total {((i+1) / len(vars) * 100.):.1f} % | Temps estimat {str(timedelta(seconds=(t_iter * (len(vars) - i)))).split(".")[0]} ---')
+    print("Generant el fitxer "+iter_nom_simulacio+".csv")
     t_exec = simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
+    ts_exec.append(t_exec)
+    t_iter = np.mean(ts_exec)
     t_acum += t_exec
     print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'
           + f'| --- temps acumulat: {str(timedelta(seconds=t_acum)).split(".")[0]}.{str(timedelta(seconds=t_acum)).split(".")[1][:2]} ---\n')
