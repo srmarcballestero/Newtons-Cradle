@@ -3,10 +3,10 @@
 """
 Projecte: Newton's Cradle.
 
- - Mòdul: VariaGamma.py
+ - Mòdul: VariaGap.py
  - Autors: Parker, Neil i Ballestero, Marc.
- - Descripció: Fer simulacions per gammes diferents.
- - Revisió: 27/09/2020
+ - Descripció: Fer simulacions per gaps diferents.
+ - Revisió: 06/10/2020
 """
 
 import numpy as np
@@ -40,7 +40,7 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = sim.directori_simulacions + "GammesRegioBona/"
+nom_directori = sim.directori_simulacions + "Gaps/"
 nom_simulacio = input("Nom de la simulació?\n")
 
 
@@ -49,15 +49,15 @@ Iteració de les condicions inicials i generació de la Simulació
 """
 t_acum = 0.
 
-gammes = np.linspace(50, 1500, num=200)
+gaps = np.linspace(0., 1.e-2, num=100)
 
-for i, gamma in enumerate(gammes):
+for i, gap in enumerate(gaps):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
 
-    parametres_sist["gamma"] = gamma
+    parametres_sist["gap"] = gap
     sist = sim.Sistema(**parametres_sist)
 
-    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gammes), (i+1) / len(gammes) * 100.))
+    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gaps), (i+1) / len(gaps) * 100.))
     t_exec = simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
     t_acum += t_exec
     print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'

@@ -3,10 +3,10 @@
 """
 Projecte: Newton's Cradle.
 
- - Mòdul: VariaGap.py
+ - Mòdul: Variavar.py
  - Autors: Parker, Neil i Ballestero, Marc.
- - Descripció: Fer simulacions per gaps diferents.
- - Revisió: 27/09/2020
+ - Descripció: Fer simulacions iterant un paràmetre.
+ - Revisió: 06/10/2020
 """
 
 import numpy as np
@@ -30,7 +30,7 @@ parametres_sist = {
     "m": np.array([0.10, 0.10]),
     "E": np.array([2.55e7, 2.55e7]),
     "j": np.array([0.48, 0.48]),
-    "pas": 2.5e-2,
+    "pas": 2.5e-1,
     "num_osc": 30,
     "salt": 10
 }
@@ -40,24 +40,28 @@ parametres_sist["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist["L"]]
 """
 Ús dels fitxer de dades i metadades
 """
-nom_directori = sim.directori_simulacions + "Gaps/"
 nom_simulacio = input("Nom de la simulació?\n")
-
+nom_directori = sim.directori_simulacions + nom_simulacio + "/"
 
 """
 Iteració de les condicions inicials i generació de la Simulació
+    var: str (nom del paràmetre del sistema a iterar)
 """
 t_acum = 0.
 
-gaps = np.linspace(0., 1.e-2, num=100)
+nom_var = "gamma"
 
-for i, gap in enumerate(gaps):
+vars = np.linspace(50, 1500, num=200)
+
+for i, var in enumerate(vars):
     iter_nom_simulacio = nom_simulacio+"_"+str(i)
 
-    parametres_sist["gap"] = gap
+    parametres_sist[nom_var] = var
+
     sist = sim.Sistema(**parametres_sist)
 
-    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gaps), (i+1) / len(gaps) * 100.))
+    print(f"--- {nom_var} = {var:.2f} ---".upper())
+    print("--- Iteració %d / %d | Progrés total %.1f %% ---" % (i+1, len(vars), (i+1) / len(vars) * 100.))
     t_exec = simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
     t_acum += t_exec
     print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'
