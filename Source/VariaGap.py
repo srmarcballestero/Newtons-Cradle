@@ -57,7 +57,7 @@ for i, gap in enumerate(gaps):
     parametres_sist["gap"] = gap
     sist = sim.Sistema(**parametres_sist)
 
-    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gaps), i+1. / len(gaps)))
+    print("--- Iteració %d / %d | Progrés total %.1f %%---" % (i+1, len(gaps), (i+1) / len(gaps) * 100.))
     t_exec = simulaSistema(parametres_sist, nom_directori, iter_nom_simulacio)
     t_acum += t_exec
     print(f'--- temps d\'execució: {str(timedelta(seconds=t_exec)).split(".")[0]}.{str(timedelta(seconds=t_exec)).split(".")[1][:2]} --- |'
