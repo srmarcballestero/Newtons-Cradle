@@ -84,3 +84,5 @@ for nom_simulacio in noms_simulacions:
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_Amp.png")
     # plt.show()
     plt.clf()
+
+plt.close()

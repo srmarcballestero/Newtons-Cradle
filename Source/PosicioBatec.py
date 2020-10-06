@@ -71,8 +71,8 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
                       + cycler(linestyle=['-', '--', ':', '-.', '--']))
     plt.rc('axes', prop_cycle=default_cycler)
 
-    plt.xlabel("$\gamma$ ($\mathrm{kg}/\mathrm{s} \mathrm{m}^2}$)", fontsize=18)
-    plt.ylabel("$t/T_0$ (-)", fontsize=18)
+    plt.xlabel(r"$\gamma$ ($\mathrm{kg}/\mathrm{s} \mathrm{m}^2}$)", fontsize=18)
+    plt.ylabel(r"$t/T_0$ (-)", fontsize=18)
     # plt.legend(loc="upper right")
 
     t_vs_var[iter] = np.array([var, t_batec/sist.T0])
@@ -84,12 +84,13 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_GammaVsBatec.png")
 
 for i in range(np.size(t_vs_var[:, 0])-1):
-    print(float(t_vs_var[i, 0]), "," , end = '')
+    print(float(t_vs_var[i, 0]), ",", end='')
 print(float(t_vs_var[np.size(t_vs_var[:, 0])-1, 0]))
 print("\n")
 for i in range(np.size(t_vs_var[:, 1])-1):
-    print(float(t_vs_var[i, 1]), ",", end = '')
+    print(float(t_vs_var[i, 1]), ",", end='')
 print(float(t_vs_var[np.size(t_vs_var[:, 1])-1, 1]))
 
 # plt.show()
 plt.clf()
+plt.close()

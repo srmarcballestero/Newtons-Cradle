@@ -84,3 +84,4 @@ plt.legend(loc='upper right')
 
 # plt.savefig(Path(nom_simulacio+"_PosCol.png"))
 plt.show()
+plt.close()

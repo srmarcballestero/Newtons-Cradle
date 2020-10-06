@@ -65,3 +65,5 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_OscAbs.png")
     # plt.show()
     plt.clf()
+
+plt.close()

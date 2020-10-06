@@ -92,3 +92,5 @@ if __name__ == "__main__":
         plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_Emc.png", dpi=600)
         # plt.show()
         plt.clf()
+
+    plt.close()
