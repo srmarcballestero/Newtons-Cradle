@@ -161,7 +161,7 @@ class Sistema:
 
         """
         Inicialitazió de les posicions i velocitats inicials.
-            pos_eq: posició d'equilibre de les boles
+            pos_eq: posició d'equilibri de les boles
             pos: s'hi guarden les últimes posicions de les boles
             vel_inici: velocitat inicial de les boles
         """
