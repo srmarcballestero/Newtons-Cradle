@@ -15,8 +15,10 @@ from pathlib import Path
 from os.path import basename
 from os import listdir
 from cycler import cycler
+from time import time
 
 import Simulacio as sim
+from DataGen import printProgressBar
 
 
 """
@@ -25,7 +27,7 @@ import Simulacio as sim
 inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
 nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
 
-noms_simulacions = Path(nom_directori + "/Data/").glob("*Sim*")
+noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
 nom_figura = Path(nom_directori+"Amplituds/")
 try:
@@ -35,10 +37,14 @@ except FileExistsError:
 
 t_vs_var = np.empty((len(listdir(Path(nom_directori + "/Data/"))), 2))
 
+t_avg = 0.
+
 for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Variables caracterísitques del sistema i generació de l'objecte
     """
+    inici = time()
+
     nom_simulacio = str(basename(nom_simulacio)).replace(".csv", "")
     nom_simulacio = nom_simulacio.replace("_Sim", "")
     nom_amplituds = nom_directori + "Amplituds/" + nom_simulacio + "_Amp.csv"
@@ -78,18 +84,13 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     t_vs_var[iter] = np.array([var, t_batec/sist.T0])
 
     plt.plot(var, t_batec/sist.T0, '.', color='blue')
-    print("Variable = %.2e" % (var))
 
+    final = time() - inici
+    t_avg = (t_avg * iter + final) / (iter+1)
+
+    printProgressBar(iter, len(noms_simulacions), len=30, temps_restant=t_avg * (len(noms_simulacions) - iter))
 
 plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_GammaVsBatec.png")
-
-for i in range(np.size(t_vs_var[:, 0])-1):
-    print(float(t_vs_var[i, 0]), ",", end='')
-print(float(t_vs_var[np.size(t_vs_var[:, 0])-1, 0]))
-print("\n")
-for i in range(np.size(t_vs_var[:, 1])-1):
-    print(float(t_vs_var[i, 1]), ",", end='')
-print(float(t_vs_var[np.size(t_vs_var[:, 1])-1, 1]))
 
 # plt.show()
 plt.clf()

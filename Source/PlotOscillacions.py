@@ -12,6 +12,7 @@ Projecte: Newton's Cradle.
 import matplotlib.pyplot as plt
 from pathlib import Path
 from os.path import basename
+from time import time
 
 import Simulacio as sim
 from DataGen import printProgressBar
@@ -24,10 +25,14 @@ nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànic
 
 noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 
+t_avg = 0.
+
 for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Variables caracterísitques del sistema i generació de l'objecte
     """
+    inici = time()
+
     nom_simulacio = str(basename(nom_simulacio)).replace(".csv", "")
     nom_simulacio = nom_simulacio.replace("_Sim", "")
     nom_data = nom_directori + "Data/" + nom_simulacio + "_Sim.csv"
@@ -60,10 +65,13 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     except FileExistsError:
         pass
 
-    printProgressBar(iter, len(noms_simulacions))
-
     plt.savefig(str(nom_figura)+"/"+nom_simulacio+"_OscAbs.png")
     # plt.show()
     plt.clf()
+
+    final = time() - inici
+    t_avg = (t_avg*iter + final) / (iter+1)
+    printProgressBar(iter, len(noms_simulacions), len=30, temps_restant=t_avg * (len(noms_simulacions) - iter))
+
 
 plt.close()
