@@ -8,7 +8,7 @@ disp("Accedint al directori"+nom_directori);
 noms_metadata = dir(fullfile(nom_directori+"Metadata/", "*Sim.dat"));
 nom_directori_rel = nom_directori+"CmRel/Rel/";
 
-iter_fitxer = 23;
+iter_fitxer = 126;
 % for iter_fitxer = 1:length(noms_metadata)
   disp("Llegint el fitxer: "+"Metadata/"+noms_metadata(iter_fitxer).name)
   fitxer_metadata = fopen(char(nom_directori+"Metadata/"+noms_metadata(iter_fitxer).name), "r");
