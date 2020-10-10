@@ -68,12 +68,26 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     t_col = []
     for i in range(len(mins_rel[0]) - 1):
         periodes += [mins_rel[0][i+1] - mins_rel[0][i]]
-        t_col += [(mins_rel[0][i+1] + mins_rel[0][i]) / 2]
+        # Aquí hi anava la mitjana.
+        t_col += [mins_rel[0][i]]
     for i in range(len(mins_rel[0]) - 1):
         plt.plot(t_col/sist.T0, periodes)
 
-    printProgressBar(iter, len(noms_simulacions))
+    printProgressBar(iter, len(noms_simulacions), len=30)
+
+    with open(nom_directori + "CmRel/Rel/" + nom_simulacio + "_Tdiff.csv", "w") as fitxer:
+        for i, t_col_i in enumerate(t_col):
+            fitxer.write("%e,%e\n" % (t_col_i, periodes[i]))
+
     plt.savefig(nom_directori + "CmRel/Rel/" + nom_simulacio + "_Tdiff.png")
     plt.clf()
+
+    """
+    Anàlisi dels màxims
+    """
+    with open(nom_directori + "CmRel/Rel/" + nom_simulacio + "_Tmax.csv", "w") as fitxer:
+        for i, max in enumerate(maxs_rel[0]):
+            fitxer.write("%e,%e\n" % (maxs_rel[0][i], maxs_rel[1][i]))
+
 
 plt.close()

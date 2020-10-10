@@ -79,7 +79,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     Representació gràfica de la posició relativa.
     """
     # ATENCIÓ: vàlid només per boles de masses idèntiques.
-    plt.plot(t/sist.T0, -.5*(pos[:, 0] - pos[:, 1]))
+    plt.plot(t/sist.T0, -1.*(pos[:, 0] - pos[:, 1]))
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_r (-)', fontsize=18)
@@ -88,7 +88,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     data_rel = open(str(nom_rel)+"/"+nom_simulacio+"_Rel.csv", "w")
 
     for i, temps in enumerate(t):
-        data_rel.write("%e,%e\n" % (temps/sist.T0, -.5*(pos[i, 0] - pos[i, 1])))
+        data_rel.write("%e,%e\n" % (temps/sist.T0, -1.*(pos[i, 0] - pos[i, 1])))
 
     data_rel.close()
 
