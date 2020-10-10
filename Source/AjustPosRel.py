@@ -73,13 +73,14 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
             pass
 
     min_avg = np.mean(mins_rel[1])
+
     for i, pos_rel_sgn_i in enumerate(pos_rel_sgn):
         if pos_rel_sgn_i > 0.:
             pos_rel_sgn[i] -= min_avg
         else:
             pos_rel_sgn[i] += min_avg
 
-    plt.plot(t[:-1]/sist.T0, pos_rel_sgn[:-1])
+    plt.plot(t[:-1], pos_rel_sgn[:-1])
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_r(sgn) (-)', fontsize=18)

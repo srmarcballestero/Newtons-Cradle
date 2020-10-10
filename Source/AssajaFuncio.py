@@ -26,12 +26,12 @@ def xr_prova(t):
     """
     a = .08499
     b = .1935
-    # c
-    Q = 3.133
-    B = .06717
-    v = .315
+    c = .02374
+    Q = 1.112
+    B = .05639
+    v = .1601
 
-    return (a*np.exp(-b*t))*np.cos(2*const.pi / (.5*(1. + 1. / pow(1. + Q*np.exp(-B*t), 1./v)))*t)
+    return (a*np.exp(-b*t) + c - 0.02)*np.cos(const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-B*t), 1./v))))*t)
 
 
 """
@@ -63,9 +63,9 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     t = data[:, 0]
     pos_rel = data[:, 1]
 
-    xr_s = [xr_prova(t) for t in np.linspace(0., 15, num=1000)]
+    xr_s = [xr_prova(t) for t in np.linspace(0., 30., num=1000)]
 
-    plt.plot(np.linspace(0., 15, num=1000), xr_s)
+    plt.plot(np.linspace(0., 30., num=1000), xr_s)
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_r(sgn) (-)', fontsize=18)
