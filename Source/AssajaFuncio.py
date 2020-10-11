@@ -22,7 +22,12 @@ from DataGen import printProgressBar
 
 def xr_prova(t):
     """
-    Docstring blablablablablabal.
+    Retorna la posició relativa assajada segons els ajustos realitzats.
+
+        Paràmetres:
+            t: float
+        Retorna:
+            xr_prova(t): float
     """
     a = .08499
     b = .1935
