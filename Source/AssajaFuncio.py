@@ -6,7 +6,7 @@ Projecte: Newton's Cradle.
  - Mòdul: AssajaFuncio.py
  - Autors: Parker, Neil i Ballestero, Marc.
  - Descripció: Assaja funció.
- - Revisió: 06/10/2020
+ - Revisió: 12/10/2020
 """
 
 import numpy as np
@@ -32,11 +32,11 @@ def xr_prova(t):
     a = .08499
     b = .1935
     c = .02374
-    Q = 1.112
-    B = .05639
-    v = .1601
+    Q = 3.133
+    B = .06717
+    v = .315
 
-    return (a*np.exp(-b*t) + c - 0.02)*np.cos(const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-B*t), 1./v))))*t)
+    return (a*np.exp(-b*t) + c - 0.02)*np.cos(const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-B*(t-.25)), 1./v))))*t)
 
 
 """
