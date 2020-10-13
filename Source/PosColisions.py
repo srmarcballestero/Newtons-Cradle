@@ -18,6 +18,7 @@ import Simulacio as sim
 """
 Ús dels fitxer de dades i metadades
 """
+# AVÍS: s'ha d'actualitzar el tractament de directoris i fitxers.
 nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
 nom_simulacio = nom_directori + input("Nom de la simulació?\n")
 nom_metadata = Path(nom_simulacio+".dat")

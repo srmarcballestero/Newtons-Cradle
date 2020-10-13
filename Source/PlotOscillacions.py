@@ -21,7 +21,7 @@ from DataGen import printProgressBar
 Ús dels fitxer de dades i metadades
 """
 inp_nom_directori = input("Directori de treball (fill de Newton's Cradle/Simulacions/)?\n")
-nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"+inp_nom_directori+"/"
+nom_directori = sim.directori_simulacions+inp_nom_directori+"/"
 
 noms_simulacions = list(Path(nom_directori + "/Data/").glob("*Sim*"))
 

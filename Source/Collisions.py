@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# ARXIU A RENOVAR SEGUINT L'ORIENTACIÓ A OBJECTES
 import numpy as np
 import matplotlib.pyplot as plt
 from cycler import cycler
