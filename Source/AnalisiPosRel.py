@@ -103,13 +103,11 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     periodes = []
     t_col = []
-    for i in range(len(mins_rel[0]) - 1):
-        periodes += [mins_rel[0][i+1] - mins_rel[0][i]]
-        t_col += [(mins_rel[0][i] + mins_rel[0][i+1]) / 2.]
-    for i in range(len(mins_rel[0]) - 1):
+    for i in range(len(maxs_rel[0]) - 1):
+        periodes += [maxs_rel[0][i+1] - maxs_rel[0][i]]
+        t_col += [(maxs_rel[0][i] + maxs_rel[0][i+1]) / 2.]
+    for i in range(len(maxs_rel[0]) - 1):
         plt.plot(t_col/sist.T0, periodes)
-
-    printProgressBar(iter, len(noms_simulacions), len=30)
 
     with open(nom_directori + "CmRel/Rel/" + nom_simulacio + "_Tdiff.csv", "w") as fitxer:
         for i, t_col_i in enumerate(t_col):
