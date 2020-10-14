@@ -38,7 +38,7 @@ def xr_prova(nom_rel, t):
         Q = float(fitxer.readline())
         D = float(fitxer.readline())
         v = float(fitxer.readline())
-    if a == b == c == float("inf") or Q == D == v == float("inf"):
+    if a == b == c == 1 or Q == D == v == 1:
         return 0.
 
     amplitud = a*np.exp(-b*t) + c - 0.02  # 0.02 <- sist.radi
