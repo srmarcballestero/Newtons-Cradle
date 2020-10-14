@@ -11,6 +11,7 @@ Projecte: Newton's Cradle.
 
 import numpy as np
 from scipy import constants as const
+from scipy import integrate
 import matplotlib.pyplot as plt
 from pathlib import Path
 from os.path import basename
@@ -20,7 +21,7 @@ import Simulacio as sim
 from DataGen import printProgressBar
 
 
-def xr_prova(t):
+def xr_prova(nom_rel, t):
     """
     Retorna la posició relativa assajada segons els ajustos realitzats.
 
@@ -29,14 +30,21 @@ def xr_prova(t):
         Retorna:
             xr_prova(t): float
     """
-    a = .08499
-    b = .1935
-    c = .02374
-    Q = 3.133
-    B = .06717
-    v = .315
+    with open(str(nom_rel).replace("Rel.csv", "FitEnv.dat"), "r") as fitxer:
+        a = float(fitxer.readline())
+        b = float(fitxer.readline())
+        c = float(fitxer.readline())
+    with open(str(nom_rel).replace("Rel.csv", "FitFreq.dat"), "r") as fitxer:
+        Q = float(fitxer.readline())
+        D = float(fitxer.readline())
+        v = float(fitxer.readline())
+    if a == b == c == float("inf") or Q == D == v == float("inf"):
+        return 0.
 
-    return (a*np.exp(-b*t) + c - 0.02)*np.cos(const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-B*(t-.25)), 1./v))))*t)
+    amplitud = a*np.exp(-b*t) + c - 0.02  # 0.02 <- sist.radi
+    fase = integrate.quad(lambda x: ((const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-D*(x)), 1./v)))))), 0, t)[0]
+
+    return amplitud * np.cos(fase)
 
 
 """
@@ -68,14 +76,41 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     t = data[:, 0]
     pos_rel = data[:, 1]
 
-    xr_s = [xr_prova(t) for t in np.linspace(0., 30., num=1000)]
+    with open(str(nom_rel).replace("Rel.csv", "AdjRel.csv"), "r") as fitxer:
+        pos_rel_sgn = np.genfromtxt(fitxer, delimiter=",")
 
-    plt.plot(np.linspace(0., 30., num=1000), xr_s)
+    pos_rel_sgn = pos_rel_sgn[:, 1]
+
+    """
+    Representa la funció assajada.
+    """
+    xr_s = [xr_prova(nom_rel, t_i) for t_i in t[1:]]
+
+    with open(str(nom_rel).replace("Rel.csv", "AdjPro.csv"), "w") as fitxer:
+        for i, t_i in enumerate(t[1:]):
+            fitxer.write("%e,%e\n" % (t_i, xr_s[i]))
+
+    plt.plot(t[1:], xr_s, color='orange')
+    plt.plot(t[1:-1], pos_rel_sgn[1:-1], color='b')
 
     plt.xlabel('t/T0 (-)', fontsize=18)
     plt.ylabel('x_r(sgn) (-)', fontsize=18)
 
     plt.savefig(str(nom_rel).replace("Rel.csv", "AdjPro.png"))
+
+    plt.clf()
+
+    """
+    Representa la diferència entre l'ajust realitzat i la corba simulada.
+    """
+    xr_diff = (pos_rel_sgn[1:-1] - xr_s[:-1])
+
+    plt.plot(t[1:-1], xr_diff)
+
+    plt.xlabel('t/T0 (-)', fontsize=18)
+    plt.ylabel('err(x_r(sgn)) (-)', fontsize=18)
+
+    plt.savefig(str(nom_rel).replace("Rel.csv", "AdjDiff.png"))
 
     plt.clf()
 
