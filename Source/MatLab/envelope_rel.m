@@ -37,7 +37,7 @@ for iter_fitxer = 1:length(noms_metadata)
       fprintf(fitxer_fit, "%e\n%e\n%e\n", fitresult.A, fitresult.B, fitresult.C);
   catch FitError
       fitxer_fit = fopen(char(nom_directori_rel+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'FitEnv.dat')), "w");
-      fprintf(fitxer_fit, "inf\ninf\ninf\n");
+      fprintf(fitxer_fit, "%s\n%s\n%s\n", 1, 1, 1);
   end
 
 end
