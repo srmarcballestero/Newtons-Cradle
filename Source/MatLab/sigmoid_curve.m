@@ -8,8 +8,7 @@ disp("Accedint al directori"+nom_directori);
 noms_metadata = dir(fullfile(nom_directori+"Metadata/", "*Sim.dat"));
 nom_directori_rel = nom_directori+"CmRel/Rel/";
 
-iter_fitxer = 23;
-% for iter_fitxer = 1:length(noms_metadata)
+for iter_fitxer = 1:length(noms_metadata)
   disp("Llegint el fitxer: "+"Metadata/"+noms_metadata(iter_fitxer).name)
   fitxer_metadata = fopen(char(nom_directori+"Metadata/"+noms_metadata(iter_fitxer).name), "r");
   fitxer_data = char(nom_directori_rel+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'Tdiff.csv'));
@@ -21,6 +20,24 @@ iter_fitxer = 23;
   t = data(:,1);
   tau = data(:,2);
   
-  input("");
+  try
+      [xData, yData] = prepareCurveData( t, tau );
 
-% end
+      ft = fittype( '0.5+0.5/(1+Q*exp(-D*x))^(1/v)', 'independent', 'x', 'dependent', 'y' );
+      excludedPoints = (yData < 0.5) | (yData > 1);
+      opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+      opts.Algorithm = 'Levenberg-Marquardt';
+      opts.Display = 'Off';
+      opts.Exclude = excludedPoints;
+
+
+      [fitresult, gof] = fit( xData, yData, ft, opts );
+
+      fitxer_fit = fopen(char(nom_directori_rel+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'FitFreq.dat')), "w");
+      fprintf(fitxer_fit, "%e\n%e\n%e\n", fitresult.Q, fitresult.D, fitresult.v);
+  catch FitError
+      fitxer_fit = fopen(char(nom_directori_rel+strrep(noms_metadata(iter_fitxer).name, 'Sim.dat', 'FitFreq.dat')), "w");
+      fprintf(fitxer_fit, "inf\ninf\ninf\n");
+  end
+
+end
