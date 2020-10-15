@@ -138,7 +138,6 @@ class Sistema:
             temps_exec: float          # temps d'execució
             iteracions: int            # nombre d'iteracions (dos períodes)
         """
-
         self.T0 = 2.*const.pi*np.sqrt(self.L / self.g)
         self.k = np.append(np.sqrt(2*self.R)*self.E / (3*(1-self.j*self.j)),
                            [0.])
