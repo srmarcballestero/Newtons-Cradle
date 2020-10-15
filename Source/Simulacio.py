@@ -47,7 +47,7 @@ def csvwrite(nom_out, *cols):
     Escriu el contingut d'un conjunt d'arrays en un fitxer .csv per columnes.
 
     Paràmetres
-        nom_mout: pathlib.Path                  # ruta de l'arxiu csv
+        nom_out: pathlib.Path                  # ruta de l'arxiu csv
         *cols: np.ndarray                       # arrays columna
     Retorna
         None
