@@ -18,6 +18,7 @@ from os.path import basename
 from time import time
 
 import Simulacio as sim
+from Simulacio import csvwrite
 from DataGen import printProgressBar
 
 
@@ -46,6 +47,25 @@ def xr_prova(nom_rel, t):
     fase = integrate.quad(lambda x: ((const.pi / (0.5 * (1. + 1./(pow(1. + Q*np.exp(-D*(x)), 1./v)))))), 0, t)[0]
 
     return amplitud * np.cos(fase)
+
+
+def xcm_prova(sist, t):
+    """
+    Retorna la posició relativa assajada segons els ajustos realitzats.
+
+        Paràmetres:
+            sist: obj sim.Sistema
+            t: float
+        Retorna:
+            xcm_prova(sist, t): float
+    """
+    # ATENCIÓ: Vàlid només per boles de masses idèntiques.
+
+    """amp = (np.max(sist.A) + 2.*sist.R + sist.gap) / 2."""
+    amp = np.max(sist.A)/2
+    omega = np.sqrt(sist.g / sist.L)
+    transl = sist.R + sist.gap/2.
+    return -1.*amp*np.cos(omega*t*sist.T0) + transl
 
 
 """
@@ -85,11 +105,9 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Representa la funció assajada.
     """
-    xr_s = [xr_prova(nom_rel, t_i) for t_i in t[1:]]
+    xr_s = np.array([np.abs(xr_prova(nom_rel, t_i)) for t_i in t[1:]]) + 2.*sist.R
 
-    with open(str(nom_rel).replace("Rel.csv", "AdjPro.csv"), "w") as fitxer:
-        for i, t_i in enumerate(t[1:]):
-            fitxer.write("%e,%e\n" % (t_i, xr_s[i]))
+    csvwrite(str(nom_rel).replace("Rel.csv", "AdjPro.csv"), t[1:], xr_s)
 
     plt.plot(t[1:], xr_s, color='orange')
     plt.plot(t[1:-1], pos_rel_sgn[1:-1], color='b')
@@ -117,6 +135,21 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 
     final = time() - inici
     t_avg = (t_avg * iter + final) / (iter + 1)
+
+    """
+    Genera i representa posicions del centre de masses i posicions de les boles.
+    """
+    xcm_s = np.array([xcm_prova(sist, t_i) for t_i in t[1:]])
+
+    x1_prova = xcm_s - np.abs(xr_s)/2.
+    x2_prova = xcm_s + np.abs(xr_s)/2.
+
+    plt.plot(t[1:], x1_prova, color='b')
+    plt.plot(t[1:], x2_prova, color='g')
+
+    plt.savefig(nom_directori + "Oscillacions/" + nom_simulacio + "_OscPro.png")
+
+    plt.clf()
 
     printProgressBar(iter, len(noms_simulacions), len=30, temps_restant=t_avg * (len(noms_simulacions) - iter))
 
