@@ -93,8 +93,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     data_rel.close()
 
     plt.savefig(str(nom_rel)+"/"+nom_simulacio+"_Rel.png")
-    if nom_simulacio == "GammesRegioBona_54":
-        plt.show()
+
     plt.clf()
 
     final = time() - inici
