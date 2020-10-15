@@ -42,6 +42,49 @@ parametres_sist_GG["A"] = np.array([np.sin(4*const.pi/180)*parametres_sist_GG["L
                                    + [0 for i in range(parametres_sist_GG["N"]-1)])
 
 
+def llegeixMetadata(nom_metadata):
+    """
+    Llegeix el conjunt mínim de variables en un fitxer de metadades .dat.
+    Escriu el contingut d'un conjunt d'arrays en un fitxer .csv per columnes.
+
+    Paràmetres
+        nom_metadata: pathlib.Path              # ruta de l'arxiu de metadades
+        nom_mout: pathlib.Path                  # ruta de l'arxiu csv
+        *cols: np.ndarray                       # arrays columna
+    Retorna
+        llegeixMetadata(nom_metadata): dict     # diccionari de metadades
+        None
+    """
+    file_metadata = open(nom_metadata, "r")
+    metadata = {}
+
+    metadata["N"] = int(file_metadata.readline())
+    metadata["g"] = float(file_metadata.readline())
+    metadata["L"] = float(file_metadata.readline())
+    metadata["R"] = float(file_metadata.readline())
+    metadata["gap"] = float(file_metadata.readline())
+    metadata["eta"] = float(file_metadata.readline())
+    metadata["gamma"] = float(file_metadata.readline())
+
+    A = file_metadata.readline().split(" ")[:-1]
+    m = file_metadata.readline().split(" ")[:-1]
+    E = file_metadata.readline().split(" ")[:-1]
+    j = file_metadata.readline().split(" ")[:-1]
+
+    metadata["A"] = np.array([float(i) for i in A])
+    metadata["m"] = np.array([float(i) for i in m])
+    metadata["E"] = np.array([float(i) for i in E])
+    metadata["j"] = np.array([float(i) for i in j])
+
+    metadata["pas"] = float(file_metadata.readline())
+    metadata["num_osc"] = float(file_metadata.readline())
+    metadata["salt"] = float(file_metadata.readline())
+
+    file_metadata.close()
+
+    return metadata
+
+
 def csvwrite(nom_out, *cols):
     """
     Escriu el contingut d'un conjunt d'arrays en un fitxer .csv per columnes.
