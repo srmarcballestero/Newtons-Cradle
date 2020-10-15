@@ -26,6 +26,7 @@ def xr_prova(nom_rel, t):
     Retorna la posició relativa assajada segons els ajustos realitzats.
 
         Paràmetres:
+            nom_rel: str
             t: float
         Retorna:
             xr_prova(t): float
