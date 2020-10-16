@@ -122,7 +122,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     """
     Representa la diferència entre l'ajust realitzat i la corba simulada.
     """
-    xr_diff = (pos_rel_sgn[1:-1] - xr_s[:-1])
+    xr_diff = np.abs(pos_rel_sgn[1:-1] - xr_s[:-1])
 
     plt.plot(t[1:-1], xr_diff)
 
@@ -133,9 +133,6 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 
     plt.clf()
 
-    final = time() - inici
-    t_avg = (t_avg * iter + final) / (iter + 1)
-
     """
     Genera i representa posicions del centre de masses i posicions de les boles.
     """
@@ -144,13 +141,40 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     x1_prova = xcm_s - np.abs(xr_s)/2.
     x2_prova = xcm_s + np.abs(xr_s)/2.
 
-    plt.plot(t[1:], x1_prova, color='b')
-    plt.plot(t[1:], x2_prova, color='g')
+    plt.plot(t[1:], x1_prova, color='b', label="Bola 1")
+    plt.plot(t[1:], x2_prova, color='g', label="Bola 2")
+
+    plt.xlabel("t/T0 (-)", fontsize=18)
+    plt.ylabel("x (m)", fontsize=18)
+
+    plt.legend(loc="upper right")
 
     plt.savefig(nom_directori + "Oscillacions/" + nom_simulacio + "_OscPro.png")
 
     plt.clf()
 
+    """
+    Representa la diferència entre l'ajust realitzat i la corba simulada.
+    """
+    data_pos = sim.Data(nom_data)
+
+    x1_diff = np.abs(x1_prova - data_pos.posicions[1:, 0])
+    x2_diff = np.abs(x2_prova - data_pos.posicions[1:, 1])
+
+    plt.plot(data_pos.temps[1:], x1_diff, color='b', label="err(x1)")
+    plt.plot(data_pos.temps[1:], x2_diff, color='g', label="err(x2)")
+
+    plt.xlabel('t/T0 (-)', fontsize=18)
+    plt.ylabel('err(x_cm) (-)', fontsize=18)
+
+    plt.legend(loc="upper right")
+
+    plt.savefig(nom_directori + "Oscillacions/" + nom_simulacio + "_OscDiff.png")
+
+    plt.clf()
+
+    final = time() - inici
+    t_avg = (t_avg * iter + final) / (iter + 1)
     printProgressBar(iter, len(noms_simulacions), len=30, temps_restant=t_avg * (len(noms_simulacions) - iter))
 
 plt.close()

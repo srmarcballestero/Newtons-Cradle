@@ -49,14 +49,21 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
     Representació gràfica de les dades
     """
     colors = ['b', 'g', 'c', 'k', 'm']
+    mode = "abs"
+    if mode == "radi":
+        for i in range(sist.N):
+            plt.fill_between(t/sist.T0, pos[:, i]/sist.R - 1, pos[:, i]/sist.R + 1,
+                             interpolate=True, alpha=0.5, color=colors[i])
+            plt.plot(t/sist.T0, pos[:, i]/sist.R, label="Bola "+str(i+1), color=colors[i])
+            plt.xlabel('t/T0 (-)', fontsize=18)
+            plt.ylabel('x/R (-)', fontsize=18)
 
-    for i in range(sist.N):
-        plt.fill_between(t/sist.T0, pos[:, i]/sist.R - 1, pos[:, i]/sist.R + 1,
-                         interpolate=True, alpha=0.5, color=colors[i])
-        plt.plot(t/sist.T0, pos[:, i]/sist.R, label="Bola "+str(i+1), color=colors[i])
+    if mode == "abs":
+        for i in range(sist.N):
+            plt.plot(t/sist.T0, pos[:, i], label="Bola "+str(i+1), color=colors[i])
+            plt.xlabel('t/T0 (-)', fontsize=18)
+            plt.ylabel('x (m)', fontsize=18)
 
-    plt.xlabel('t/T0 (-)', fontsize=18)
-    plt.ylabel('x/R (-)', fontsize=18)
     plt.legend(loc="upper right")
 
     nom_figura = Path(nom_directori+"Oscillacions/")
