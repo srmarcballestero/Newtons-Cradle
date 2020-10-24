@@ -60,8 +60,6 @@ def xcm_prova(sist, t):
             xcm_prova(sist, t): float
     """
     # ATENCIÓ: Vàlid només per boles de masses idèntiques.
-
-    """amp = (np.max(sist.A) + 2.*sist.R + sist.gap) / 2."""
     amp = np.max(sist.A)/2
     omega = np.sqrt(sist.g / sist.L)
     transl = sist.R + sist.gap/2.
@@ -109,7 +107,7 @@ for iter, nom_simulacio in enumerate(noms_simulacions):
 
     csvwrite(str(nom_rel).replace("Rel.csv", "AdjPro.csv"), t[1:], xr_s)
 
-    plt.plot(t[1:], xr_s, color='orange')
+    # plt.plot(t[1:], xr_s, color='orange')
     plt.plot(t[1:-1], pos_rel_sgn[1:-1], color='b')
 
     plt.xlabel('t/T0 (-)', fontsize=18)
