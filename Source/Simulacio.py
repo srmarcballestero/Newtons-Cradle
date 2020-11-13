@@ -21,7 +21,7 @@ Variables globals d'interès
     directori_simulacions: directori estàndard on es guarden les dades generades
     parametres_sist_GG: característiques físiques del sistema goma-goma
 """
-directori_simulacions = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+directori_simulacion = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
 
 parametres_sist_GG = {
     "N": 2,
