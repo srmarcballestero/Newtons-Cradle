@@ -19,7 +19,7 @@ import Simulacio as sim
 Ús dels fitxer de dades i metadades
 """
 # AVÍS: s'ha d'actualitzar el tractament de directoris i fitxers.
-nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/"
+nom_directori = "/home/marc/OneDrive/Documents/Universitat/Física/S4 - Mecànica/Newton's Cradle/Simulacions/TInf/"
 nom_simulacio = nom_directori + input("Nom de la simulació?\n")
 nom_metadata = Path(nom_simulacio+".dat")
 nom_data = Path(nom_simulacio+".csv")
@@ -43,7 +43,7 @@ vel = [np.array([]), np.array([])]
 trans = []                                  # False: 0->1, True: 1->0
 i = 0
 
-
+# AVÍS: s'ha de rellegir i pensar què passa amb els eixos.
 while i < len(t):
     if sist.xi(pos[i, :], 0, 1) != 0:
         t_col = np.append(t_col, [t[i]])
